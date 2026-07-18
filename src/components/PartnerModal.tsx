@@ -453,7 +453,7 @@ export default function PartnerModal({ isOpen, onClose }: PartnerModalProps) {
 									>
 										<input
 											type="text"
-											placeholder="e.g. Liberia Revenue Authority"
+											placeholder="e.g. Your organization name"
 											value={enterpriseFields.orgName}
 											onChange={(event) =>
 												setEnterpriseFields((prev) => ({
@@ -581,7 +581,7 @@ export default function PartnerModal({ isOpen, onClose }: PartnerModalProps) {
 									>
 										<input
 											type="text"
-											placeholder="e.g. Upstairs Christian Academy"
+											placeholder="e.g. Your school or institution name"
 											value={educationFields.institutionName}
 											onChange={(event) =>
 												setEducationFields((prev) => ({

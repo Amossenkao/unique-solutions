@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import {
-  BriefcaseBusiness,
   Building2,
   ChevronRight,
   GraduationCap,
@@ -23,9 +22,8 @@ const NAV_LINKS = [
   { label: "About Us", href: "#about", icon: Info },
   { label: "Services", href: "#services", icon: Network },
   { label: "Digital Literacy", href: "#digital-literacy", icon: GraduationCap },
-  // { label: "ICT Equipment", href: "#ict-equipment", icon: PackageCheck },
+  { label: "ICT Equipment", href: "#ict-equipment", icon: PackageCheck },
   // { label: "Enterprise ICT", href: "#enterprise-ict", icon: Building2 },
-  { label: "Track Record", href: "#track-record", icon: BriefcaseBusiness },
   { label: "Contact Us", href: "#contact", icon: Mail },
 ];
 

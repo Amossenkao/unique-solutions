@@ -3,16 +3,14 @@
 import { Building2, GraduationCap, Landmark, Network, ShieldCheck } from 'lucide-react';
 
 const PARTNERS = [
-	'LIBTELCO',
-	'Liberia Revenue Authority',
-	'Central Bank of Liberia',
-	'JFK Memorial Hospital',
-	'Afriland First Bank',
-	'Grand Bassa University',
-	'STARZ University',
-	'Faith University',
-	'National Port Authority',
-	'NOCAL',
+	'Healthcare Institutions',
+	'Government Agencies',
+	'Banking & Finance',
+	'Higher Education',
+	'Telecommunications',
+	'Universities & Colleges',
+	'Public Sector',
+	'Schools & Academies',
 ];
 
 const SIGNALS = [
@@ -33,7 +31,7 @@ export default function PartnerBanner() {
 					<div className="reveal-up">
 						<div className="section-kicker mb-3">Trusted delivery</div>
 						<h2 className="font-display text-2xl font-extrabold tracking-tight text-brand-neutral-dark sm:text-3xl">
-							Real systems for institutions that cannot pause.
+							Systems institutions depend on.
 						</h2>
 						<p className="mt-3 max-w-xl text-sm leading-6 text-slate-500">
 							UTECHS combines software engineering, infrastructure, cybersecurity, and support for organizations across Liberia.

@@ -52,7 +52,7 @@ export default function About() {
 					<div className="reveal-up">
 						<div className="section-kicker mb-3">About UTECHS</div>
 						<h2 className="font-display text-3xl font-extrabold tracking-tight text-brand-neutral-dark sm:text-4xl lg:text-5xl">
-							A Liberian-owned technology firm built for real-world impact.
+							Built for real-world impact.
 						</h2>
 						<p className="mt-5 max-w-2xl text-sm leading-7 text-slate-500">
 							Unique Technology Solutions (UTECHS) is an ICT consulting and systems integration firm
@@ -126,8 +126,8 @@ export default function About() {
 						<div>
 							<p className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Trusted by</p>
 							<p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-								JFK Hospital, Liberia Revenue Authority, National Port Authority, Afriland First Bank,
-								LIBTELCO, National Oil Company of Liberia, Central Bank of Liberia, and more.
+								We work with various institutions across Liberia in sectors including healthcare,
+								higher education, banking, government, and telecommunications.
 							</p>
 						</div>
 						<div className="flex flex-wrap gap-2">

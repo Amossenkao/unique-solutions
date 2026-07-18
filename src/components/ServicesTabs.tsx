@@ -183,6 +183,7 @@ const STUDIOS: Record<
 
 const STACK = ['Next.js', 'React', 'Node.js', '.NET', 'Python', 'SQL', 'Cisco', 'SOPHOS', 'ESET', 'VMware'];
 const EQUIPMENT_IMAGES = ['/images/stock2.jpg', '/images/stock3.jpg', '/images/stock4.jpg', '/images/stock6.jpg'];
+const LAB_IMAGES = ['/images/lab1.jpg', '/images/lab3.jpg', '/images/lab4.jpg'];
 const STUDIO_ORDER: Studio[] = ['supply', 'learn', 'operate', 'build'];
 
 export default function ServicesTabs() {
@@ -198,7 +199,7 @@ export default function ServicesTabs() {
 					<div className="reveal-up">
 						<div className="section-kicker mb-3">Capabilities</div>
 						<h2 className="font-display text-3xl font-extrabold tracking-tight text-brand-neutral-dark sm:text-4xl lg:text-5xl">
-							Strategy, code, infrastructure, and support under one roof.
+							Everything IT, under one roof.
 						</h2>
 					</div>
 					<p className="max-w-2xl text-sm leading-7 text-slate-500 lg:ml-auto">
@@ -255,6 +256,28 @@ export default function ServicesTabs() {
 										<Image
 											src={src}
 											alt={`UTECHS ICT equipment stock ${index + 1}`}
+											fill
+											className="object-cover"
+											sizes="(min-width: 1024px) 18vw, 45vw"
+										/>
+										<div className="absolute inset-0 bg-gradient-to-t from-slate-950/45 to-transparent" />
+									</div>
+								))}
+							</div>
+						)}
+
+						{activeTab === 'learn' && (
+							<div className="mt-5 grid grid-cols-2 gap-2">
+								{LAB_IMAGES.map((src, index) => (
+									<div
+										key={src}
+										className={`relative overflow-hidden border border-white/10 bg-white/[0.04] ${
+											index === 0 ? 'col-span-2 aspect-[16/8]' : 'aspect-[4/3]'
+										}`}
+									>
+										<Image
+											src={src}
+											alt={`UTECHS computer lab deployment ${index + 1}`}
 											fill
 											className="object-cover"
 											sizes="(min-width: 1024px) 18vw, 45vw"

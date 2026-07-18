@@ -43,7 +43,7 @@ export default function EnterpriseICT() {
 							Enterprise ICT Solutions
 						</div>
 						<h2 className="font-display text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
-							Infrastructure that powers Liberia&apos;s leading institutions.
+							Infrastructure that keeps Liberia running.
 						</h2>
 						<p className="mt-5 max-w-2xl text-sm leading-7 text-white/62">
 							From LAN/WAN networks and server rooms to cybersecurity and solar power,
@@ -100,8 +100,9 @@ export default function EnterpriseICT() {
 						<div>
 							<p className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/36">Enterprise clients</p>
 							<p className="mt-2 max-w-2xl text-sm leading-6 text-white/58">
-								JFK Hospital, National Port Authority, Liberia Revenue Authority,
-								Afriland First Bank, LIBTELCO, National Oil Company of Liberia, Central Bank of Liberia, and more.
+								We partner with institutions across Liberia in healthcare, higher education,
+								banking, government, and telecommunications — delivering infrastructure
+								they depend on every day.
 							</p>
 						</div>
 						<div className="flex flex-wrap gap-2">

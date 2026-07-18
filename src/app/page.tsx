@@ -9,16 +9,17 @@ import ServicesTabs from "@/components/ServicesTabs";
 import DigitalLiteracy from "@/components/DigitalLiteracy";
 import EquipmentSales from "@/components/EquipmentSales";
 import EnterpriseICT from "@/components/EnterpriseICT";
-import AssignmentsTable from "@/components/AssignmentsTable";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 import PartnerModal from "@/components/PartnerModal";
+import ScrollReveal from "@/components/ScrollReveal";
 
 export default function Home() {
   const [modalOpen, setModalOpen] = useState(false);
 
   return (
     <>
+      <ScrollReveal />
       <Header onOpenModal={() => setModalOpen(true)} />
 
       <main>
@@ -29,7 +30,6 @@ export default function Home() {
         <DigitalLiteracy />
         <EquipmentSales />
         <EnterpriseICT />
-        <AssignmentsTable />
         <ContactForm />
       </main>
 

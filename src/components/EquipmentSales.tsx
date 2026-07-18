@@ -33,9 +33,9 @@ const CATEGORIES = [
 ];
 
 const PROOF = [
-	'Dell Optiplex i7 desktop supply and ESET licensing for JFK Memorial Hospital.',
-	'HP Servers, Cisco routers/firewalls, SOPHOS Firewall, Windows Server and SQL licenses for LIBTELCO.',
-	'Cisco Layer 3 switches for Afriland First Bank Liberia core banking infrastructure.',
+	'Desktop computer supply and endpoint security licensing for healthcare institutions.',
+	'Server, firewall, and network equipment procurement for telecommunications providers.',
+	'Core network switching infrastructure for financial institutions.',
 	'Desktop computers, thin-client devices, and accessories supplied for university computer lab deployments.',
 ];
 
@@ -48,7 +48,7 @@ export default function EquipmentSales() {
 					<div className="reveal-up">
 						<div className="section-kicker mb-3">ICT Equipment Sales</div>
 						<h2 className="font-display text-3xl font-extrabold tracking-tight text-brand-neutral-dark sm:text-4xl lg:text-5xl">
-							Procurement, configuration, and support for the equipment your systems depend on.
+							Equipment sourced, configured, supported.
 						</h2>
 						<p className="mt-5 max-w-2xl text-sm leading-7 text-slate-500">
 							UTECHS supplies ICT equipment for offices, banks, government agencies, hospitals, universities, and schools. The work does not stop at delivery: equipment can be configured, licensed, tested, installed, and supported as part of a complete technology rollout.

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Building2,
   GraduationCap,
@@ -42,7 +42,8 @@ const ENROLLMENT_RANGES = [
 ];
 
 export default function ContactForm() {
-  const [partnerType, setPartnerType] = useState<PartnerType>(null);
+  const defaultType = useMemo<PartnerType>(() => Math.random() < 0.5 ? "enterprise" : "education", []);
+  const [partnerType, setPartnerType] = useState<PartnerType>(defaultType);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -214,7 +215,7 @@ export default function ContactForm() {
           <div className="reveal-up">
             <p className="section-kicker mb-3">Start a project</p>
             <h2 className="font-display text-3xl font-extrabold tracking-tight text-brand-neutral-dark sm:text-4xl lg:text-5xl">
-              Bring us the business problem. We&apos;ll map the technology path.
+              Let&apos;s build your solution.
             </h2>
           </div>
           <p className="max-w-2xl text-sm leading-7 text-slate-500 lg:ml-auto">
@@ -336,7 +337,7 @@ export default function ContactForm() {
                     </label>
                     <input
                       type="text"
-                      placeholder="e.g. Liberia Revenue Authority"
+                      placeholder="e.g. Your organization name"
                       value={orgName}
                       onChange={(e) => setOrgName(e.target.value)}
                       className={fieldClass("orgName")}
@@ -469,7 +470,7 @@ export default function ContactForm() {
                     </label>
                     <input
                       type="text"
-                      placeholder="e.g. Upstairs Christian Academy"
+                      placeholder="e.g. Your school or institution name"
                       value={institutionName}
                       onChange={(e) => setInstitutionName(e.target.value)}
                       className={fieldClass("institutionName")}
@@ -793,7 +794,6 @@ export default function ContactForm() {
                 {[
                   { label: "Enterprise Services", href: "#services" },
                   { label: "Computer Lab Program", href: "#digital-literacy" },
-                  { label: "Our Track Record", href: "#track-record" },
                 ].map((link) => (
                   <a
                     key={link.href}

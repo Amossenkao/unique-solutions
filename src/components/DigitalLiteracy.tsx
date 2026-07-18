@@ -24,6 +24,12 @@ const OPERATING_MODEL = [
 	},
 ];
 
+const LAB_IMAGES = [
+	'/images/lab1.jpg',
+	'/images/lab3.jpg',
+	'/images/lab4.jpg',
+];
+
 const VALUE_POINTS = [
 	{ value: '90%', label: 'Lower workstation power use', icon: PlugZap },
 	{ value: '$20', label: 'Per student / semester', icon: CircleDollarSign },
@@ -42,7 +48,7 @@ export default function DigitalLiteracy() {
 							Computer Lab as a Service
 						</div>
 						<h2 className="font-display text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
-							A school computer lab that operates like a managed service.
+							Your lab, fully managed.
 						</h2>
 						<p className="mt-5 max-w-2xl text-sm leading-7 text-white/62">
 							UTECHS gives schools a complete digital literacy program: thin-client hardware, lab networking, optional internet, curriculum, instructors, maintenance, and a funding model that does not depend on heavy upfront capital.
@@ -59,24 +65,47 @@ export default function DigitalLiteracy() {
 						</div>
 					</div>
 
-					<div className="relative reveal-up">
-						<div className="border border-white/10 bg-white/[0.04] p-3 shadow-2xl shadow-black/30">
-							<div className="relative aspect-[4/3] overflow-hidden">
+				<div className="reveal-up">
+					<div className="grid grid-cols-2 gap-3">
+						{LAB_IMAGES.map((src, index) => (
+							<div
+								key={src}
+								className={`relative overflow-hidden border border-white/10 bg-white/[0.06] shadow-2xl shadow-black/30 ${
+									index === 0 ? 'col-span-2 aspect-[16/8]' : 'aspect-[4/3]'
+								}`}
+							>
 								<Image
-									src="/images/lab1.jpg"
-									alt="UTECHS computer lab deployment"
+									src={src}
+									alt={`UTECHS computer lab deployment ${index + 1}`}
 									fill
 									className="object-cover"
 									sizes="(min-width: 1024px) 45vw, 100vw"
 								/>
-								<div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent" />
-								<div className="absolute bottom-4 left-4 right-4 border border-white/12 bg-slate-950/70 p-4 backdrop-blur-md">
-									<p className="text-[11px] font-bold uppercase tracking-[0.16em] text-brand-green">Lab deployment</p>
-									<p className="mt-1 text-sm font-semibold text-white">Hardware, curriculum, staffing, and support in one program.</p>
-								</div>
+								<div className="absolute inset-0 bg-gradient-to-t from-slate-950/42 to-transparent" />
+							</div>
+						))}
+					</div>
+
+					<div className="mt-5 border border-white/10 bg-white/[0.04] p-5 text-white shadow-2xl shadow-black/30">
+						<div className="mb-5 flex items-center gap-3">
+							<div className="flex h-11 w-11 items-center justify-center bg-brand-green text-slate-950">
+								<Server size={22} />
+							</div>
+							<div>
+								<p className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/38">Lab program</p>
+								<h3 className="font-display text-lg font-extrabold">Assess. Deploy. Teach. Maintain.</h3>
 							</div>
 						</div>
+						<div className="grid gap-2 sm:grid-cols-3">
+							{['Hardware & Networking', 'Curriculum & Instructors', 'Ongoing Maintenance'].map((step) => (
+								<div key={step} className="border border-white/10 bg-white/[0.06] p-3">
+									<CheckCircle2 size={15} className="mb-2 text-brand-green" />
+									<p className="text-xs font-bold text-white/76">{step}</p>
+								</div>
+							))}
+						</div>
 					</div>
+				</div>
 				</div>
 
 				<div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4 reveal-stagger">
@@ -99,7 +128,8 @@ export default function DigitalLiteracy() {
 						<div>
 							<p className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/36">Active school partners</p>
 							<p className="mt-2 max-w-2xl text-sm leading-6 text-white/58">
-								STARZ College, Grand Bassa University, Faith University, Rudolph Kwanue University, Upstairs Christian Academy, Bishop Marwieh High School, and more.
+								We work with universities, colleges, and schools across Liberia to deliver
+							managed computer lab programs, digital literacy curricula, and ongoing technical support.
 							</p>
 						</div>
 						<div className="flex flex-wrap gap-2">

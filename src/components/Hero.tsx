@@ -45,7 +45,7 @@ const SLIDES: Slide[] = [
 	{
 		id: 'education',
 		image: '/images/hero/education.jpg',
-		tint: 'from-[#062416] via-[#4C8317]/60 to-[#07111f]',
+		tint: 'from-[#062416] via-[#4C8317]/35 to-[#07111f]',
 		badge: 'Computer Lab as a Service',
 		headline: 'Labs that power digital learning',
 		accent: 'Labs',
@@ -64,7 +64,7 @@ const SLIDES: Slide[] = [
 	{
 		id: 'equipment',
 		image: '/images/stock3.jpg',
-		tint: 'from-[#102036] via-[#0A4B93]/55 to-[#07111f]',
+		tint: 'from-[#102036] via-[#0A4B93]/30 to-[#07111f]',
 		badge: 'ICT Equipment Sales',
 		headline: 'ICT gear, deployment-ready',
 		accent: 'ICT gear',
@@ -83,7 +83,7 @@ const SLIDES: Slide[] = [
 	{
 		id: 'enterprise',
 		image: '/images/hero/enterprise.jpg',
-		tint: 'from-[#061B3A] via-[#0A4B93]/90 to-[#07111f]',
+		tint: 'from-[#061B3A] via-[#0A4B93]/50 to-[#07111f]',
 		badge: 'Enterprise ICT Solutions',
 		headline: 'Infrastructure built to scale',
 		accent: 'Infrastructure',
@@ -102,7 +102,7 @@ const SLIDES: Slide[] = [
 	{
 		id: 'web',
 		image: '/images/stock5.jpg',
-		tint: 'from-[#06152d] via-[#083f7d]/90 to-[#07111f]',
+		tint: 'from-[#06152d] via-[#083f7d]/50 to-[#07111f]',
 		badge: 'Web, API & Product Engineering',
 		headline: 'Web platforms that perform',
 		accent: 'Web platforms',
@@ -121,7 +121,7 @@ const SLIDES: Slide[] = [
 	{
 		id: 'security',
 		image: '/images/stock2.jpg',
-		tint: 'from-[#101827] via-[#0A4B93]/85 to-[#17370c]',
+		tint: 'from-[#101827] via-[#0A4B93]/45 to-[#17370c]',
 		badge: 'Cybersecurity & Managed Support',
 		headline: 'Security you can count on',
 		accent: 'Security',
