@@ -2,17 +2,25 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { Menu, X, ChevronRight } from "lucide-react";
+import {
+  BriefcaseBusiness,
+  ChevronRight,
+  GraduationCap,
+  Mail,
+  Menu,
+  Network,
+  X,
+} from "lucide-react";
 
 interface HeaderProps {
   onOpenModal: () => void;
 }
 
 const NAV_LINKS = [
-  { label: "Services", href: "#services" },
-  { label: "Digital Literacy", href: "#digital-literacy" },
-  { label: "Track Record", href: "#track-record" },
-  { label: "Contact Us", href: "#contact" },
+  { label: "Services", href: "#services", icon: Network },
+  { label: "Digital Literacy", href: "#digital-literacy", icon: GraduationCap },
+  { label: "Track Record", href: "#track-record", icon: BriefcaseBusiness },
+  { label: "Contact Us", href: "#contact", icon: Mail },
 ];
 
 export default function Header({ onOpenModal }: HeaderProps) {
@@ -97,19 +105,23 @@ export default function Header({ onOpenModal }: HeaderProps) {
               className="hidden md:flex items-center gap-1"
               aria-label="Main navigation"
             >
-              {NAV_LINKS.map((link) => (
+              {NAV_LINKS.map((link) => {
+                const Icon = link.icon;
+                return (
                 <button
                   key={link.href}
                   onClick={() => handleNavClick(link.href)}
-                  className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-150 ${
+                  className={`inline-flex items-center gap-2 px-3 py-2 text-sm font-semibold rounded-lg transition-all duration-150 ${
                     isScrolled
                       ? "text-slate-600 hover:text-brand-blue hover:bg-brand-blue-light"
                       : "text-white/72 hover:text-white hover:bg-white/10"
                   }`}
                 >
+                  <Icon size={15} />
                   {link.label}
                 </button>
-              ))}
+                );
+              })}
             </nav>
 
             {/* Desktop CTA */}
@@ -127,7 +139,11 @@ export default function Header({ onOpenModal }: HeaderProps) {
             {/* Mobile hamburger */}
             <button
               onClick={() => setMobileOpen((v) => !v)}
-              className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
+              className={`md:hidden flex items-center justify-center w-10 h-10 rounded-lg transition-colors ${
+                isScrolled
+                  ? "text-slate-600 hover:bg-slate-100"
+                  : "text-white hover:bg-white/10"
+              }`}
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
               aria-expanded={mobileOpen}
               aria-controls="mobile-menu"
@@ -154,24 +170,62 @@ export default function Header({ onOpenModal }: HeaderProps) {
         id="mobile-menu"
         role="dialog"
         aria-label="Navigation menu"
-        className={`fixed top-[72px] left-0 right-0 z-40 md:hidden bg-white border-b border-slate-100 shadow-lg transition-all duration-300 ${
+        className={`fixed right-0 top-0 z-[60] h-dvh w-[min(88vw,360px)] md:hidden bg-white shadow-2xl transition-all duration-300 ${
           mobileOpen
-            ? "translate-y-0 opacity-100"
-            : "-translate-y-4 opacity-0 pointer-events-none"
+            ? "translate-x-0 opacity-100"
+            : "translate-x-full opacity-0 pointer-events-none"
         }`}
       >
-        <nav className="section-container py-4 flex flex-col gap-1">
-          {NAV_LINKS.map((link) => (
+        <div className="flex h-full flex-col">
+          <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
+            <div className="flex items-center gap-3">
+              <div className="bg-white p-1 rounded-lg border border-slate-100 shadow-sm flex-shrink-0">
+                <Image
+                  src="/images/logo.jpg"
+                  alt="UTECHS Logo"
+                  width={38}
+                  height={38}
+                  className="object-cover rounded-md"
+                />
+              </div>
+              <div>
+                <p className="font-display text-base font-bold text-brand-blue-dark">
+                  UTECHS
+                </p>
+                <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">
+                  Technology Solutions
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setMobileOpen(false)}
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100"
+              aria-label="Close menu"
+            >
+              <X size={20} />
+            </button>
+          </div>
+
+        <nav className="flex flex-1 flex-col gap-2 px-5 py-6">
+          {NAV_LINKS.map((link) => {
+            const Icon = link.icon;
+            return (
             <button
               key={link.href}
               onClick={() => handleNavClick(link.href)}
-              className="flex items-center justify-between px-4 py-3 text-sm font-medium text-slate-700 hover:text-brand-blue hover:bg-brand-blue-light rounded-lg transition-colors text-left"
+              className="flex items-center justify-between border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700 transition-colors hover:border-brand-blue/30 hover:bg-brand-blue-light hover:text-brand-blue text-left"
             >
-              {link.label}
+              <span className="flex items-center gap-3">
+                <span className="flex h-9 w-9 items-center justify-center bg-slate-50 text-brand-blue">
+                  <Icon size={17} />
+                </span>
+                {link.label}
+              </span>
               <ChevronRight size={15} className="text-slate-400" />
             </button>
-          ))}
-          <div className="pt-3 border-t border-slate-100 mt-2">
+            );
+          })}
+          <div className="mt-auto border-t border-slate-100 pt-5">
             <button
               onClick={() => {
                 setMobileOpen(false);
@@ -184,6 +238,7 @@ export default function Header({ onOpenModal }: HeaderProps) {
             </button>
           </div>
         </nav>
+        </div>
       </div>
     </>
   );

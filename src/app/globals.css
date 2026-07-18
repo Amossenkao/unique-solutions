@@ -131,6 +131,7 @@
   border-radius: 0.5rem;
   transition: all 0.2s;
   font-size: 0.875rem;
+  cursor: pointer;
   box-shadow: 0 14px 28px rgba(0, 102, 204, 0.18);
 }
 .btn-primary:hover {
@@ -151,6 +152,7 @@
   border: 1px solid var(--brand-blue);
   transition: all 0.2s;
   font-size: 0.875rem;
+  cursor: pointer;
 }
 .btn-secondary:hover {
   background-color: var(--brand-blue-light);

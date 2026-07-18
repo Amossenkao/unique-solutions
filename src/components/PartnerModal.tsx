@@ -1,728 +1,835 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  X,
-  Building2,
-  GraduationCap,
-  ChevronLeft,
-  CheckCircle2,
-  Loader2,
-} from "lucide-react";
+	ArrowRight,
+	Building2,
+	CheckCircle2,
+	ChevronLeft,
+	Code2,
+	GraduationCap,
+	Loader2,
+	Mail,
+	MonitorCog,
+	Network,
+	PackageCheck,
+	Phone,
+	ShieldCheck,
+	X,
+} from 'lucide-react';
 
-type ClientType = "enterprise" | "education" | null;
+type ClientType = 'enterprise' | 'education' | null;
 type Step = 1 | 2 | 3;
 
 interface EnterpriseFields {
-  orgName: string;
-  contactName: string;
-  contactTitle: string;
-  workEmail: string;
-  phone: string;
-  projectNeed: string;
-  scopeDetails: string;
+	orgName: string;
+	contactName: string;
+	contactTitle: string;
+	workEmail: string;
+	phone: string;
+	projectNeed: string;
+	scopeDetails: string;
 }
 
 interface EducationFields {
-  institutionName: string;
-  repName: string;
-  repTitle: string;
-  email: string;
-  phone: string;
-  enrollment: string;
-  solutions: string[];
-  additionalContext: string;
+	institutionName: string;
+	repName: string;
+	repTitle: string;
+	email: string;
+	phone: string;
+	enrollment: string;
+	solutions: string[];
+	additionalContext: string;
 }
 
 interface PartnerModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+	isOpen: boolean;
+	onClose: () => void;
 }
 
 const EDUCATION_SOLUTIONS = [
-  "NComputing Thin-Client Lab",
-  "Solar Power Systems",
-  "Trained IT Instructors",
-  "Curriculum / Syllabi Integration",
+	'NComputing Thin-Client Lab',
+	'Solar Power Systems',
+	'Trained IT Instructors',
+	'Curriculum / Syllabi Integration',
 ];
 
 const PROJECT_NEEDS = [
-  "Network Infrastructure (LAN/WAN)",
-  "Solar / Power Backup Systems",
-  "Software & API Development",
-  "Cyber Security & Endpoint Protection",
-  "ICT Equipment Supply",
-  "Managed IT Services",
-  "Other",
+	'Websites, Portals & API Development',
+	'Network Infrastructure (LAN/WAN)',
+	'ICT Equipment Supply',
+	'Solar / Power Backup Systems',
+	'Cyber Security & Endpoint Protection',
+	'Managed IT Services',
+	'Other',
 ];
 
 const ENROLLMENT_RANGES = [
-  "Under 100 students",
-  "100 – 300 students",
-  "301 – 600 students",
-  "601 – 1,000 students",
-  "Over 1,000 students",
+	'Under 100 students',
+	'100 - 300 students',
+	'301 - 600 students',
+	'601 - 1,000 students',
+	'Over 1,000 students',
+];
+
+const MODAL_SIGNALS = [
+	{ icon: Code2, label: 'Web platforms' },
+	{ icon: Network, label: 'ICT infrastructure' },
+	{ icon: PackageCheck, label: 'Equipment supply' },
+	{ icon: ShieldCheck, label: 'Security support' },
 ];
 
 export default function PartnerModal({ isOpen, onClose }: PartnerModalProps) {
-  const [step, setStep] = useState<Step>(1);
-  const [clientType, setClientType] = useState<ClientType>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+	const [step, setStep] = useState<Step>(1);
+	const [clientType, setClientType] = useState<ClientType>(null);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [enterpriseFields, setEnterpriseFields] = useState<EnterpriseFields>({
-    orgName: "",
-    contactName: "",
-    contactTitle: "",
-    workEmail: "",
-    phone: "",
-    projectNeed: "",
-    scopeDetails: "",
-  });
+	const [enterpriseFields, setEnterpriseFields] = useState<EnterpriseFields>({
+		orgName: '',
+		contactName: '',
+		contactTitle: '',
+		workEmail: '',
+		phone: '',
+		projectNeed: '',
+		scopeDetails: '',
+	});
 
-  const [educationFields, setEducationFields] = useState<EducationFields>({
-    institutionName: "",
-    repName: "",
-    repTitle: "",
-    email: "",
-    phone: "",
-    enrollment: "",
-    solutions: [],
-    additionalContext: "",
-  });
+	const [educationFields, setEducationFields] = useState<EducationFields>({
+		institutionName: '',
+		repName: '',
+		repTitle: '',
+		email: '',
+		phone: '',
+		enrollment: '',
+		solutions: [],
+		additionalContext: '',
+	});
 
-  const [errors, setErrors] = useState<Record<string, string>>({});
+	const [errors, setErrors] = useState<Record<string, string>>({});
+	const modalRef = useRef<HTMLDivElement>(null);
+	const closeRef = useRef<HTMLButtonElement>(null);
 
-  const modalRef = useRef<HTMLDivElement>(null);
-  const firstFocusRef = useRef<HTMLButtonElement>(null);
+	useEffect(() => {
+		if (!isOpen) return;
 
-  // Lock body scroll and trap focus
-  useEffect(() => {
-    if (!isOpen) return;
-    document.body.style.overflow = "hidden";
-    firstFocusRef.current?.focus();
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isOpen]);
+		document.body.style.overflow = 'hidden';
+		closeRef.current?.focus();
 
-  // Escape key to close
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    if (isOpen) window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [isOpen, onClose]);
+		return () => {
+			document.body.style.overflow = '';
+		};
+	}, [isOpen]);
 
-  // Focus trap within modal
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLDivElement>) => {
-      if (e.key !== "Tab" || !modalRef.current) return;
-      const focusable = modalRef.current.querySelectorAll<HTMLElement>(
-        'button, input, textarea, select, [tabindex]:not([tabindex="-1"])'
-      );
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (e.shiftKey) {
-        if (document.activeElement === first) {
-          e.preventDefault();
-          last?.focus();
-        }
-      } else {
-        if (document.activeElement === last) {
-          e.preventDefault();
-          first?.focus();
-        }
-      }
-    },
-    []
-  );
+	useEffect(() => {
+		const handler = (event: KeyboardEvent) => {
+			if (event.key === 'Escape') handleClose();
+		};
 
-  const resetModal = () => {
-    setStep(1);
-    setClientType(null);
-    setErrors({});
-    setIsSubmitting(false);
-    setEnterpriseFields({
-      orgName: "",
-      contactName: "",
-      contactTitle: "",
-      workEmail: "",
-      phone: "",
-      projectNeed: "",
-      scopeDetails: "",
-    });
-    setEducationFields({
-      institutionName: "",
-      repName: "",
-      repTitle: "",
-      email: "",
-      phone: "",
-      enrollment: "",
-      solutions: [],
-      additionalContext: "",
-    });
-  };
+		if (isOpen) window.addEventListener('keydown', handler);
+		return () => window.removeEventListener('keydown', handler);
+	});
 
-  const handleClose = () => {
-    onClose();
-    setTimeout(resetModal, 300);
-  };
+	const handleKeyDown = useCallback(
+		(event: React.KeyboardEvent<HTMLDivElement>) => {
+			if (event.key !== 'Tab' || !modalRef.current) return;
 
-  const handleSelectType = (type: ClientType) => {
-    setClientType(type);
-    setStep(2);
-    setErrors({});
-  };
+			const focusable = modalRef.current.querySelectorAll<HTMLElement>(
+				'button, input, textarea, select, [tabindex]:not([tabindex="-1"])',
+			);
+			const first = focusable[0];
+			const last = focusable[focusable.length - 1];
 
-  const toggleSolution = (solution: string) => {
-    setEducationFields((prev) => ({
-      ...prev,
-      solutions: prev.solutions.includes(solution)
-        ? prev.solutions.filter((s) => s !== solution)
-        : [...prev.solutions, solution],
-    }));
-  };
+			if (event.shiftKey && document.activeElement === first) {
+				event.preventDefault();
+				last?.focus();
+			} else if (!event.shiftKey && document.activeElement === last) {
+				event.preventDefault();
+				first?.focus();
+			}
+		},
+		[],
+	);
 
-  const validateEnterprise = () => {
-    const e: Record<string, string> = {};
-    if (!enterpriseFields.orgName.trim()) e.orgName = "Organization name is required.";
-    if (!enterpriseFields.contactName.trim()) e.contactName = "Contact name is required.";
-    if (!enterpriseFields.workEmail.trim() || !enterpriseFields.workEmail.includes("@"))
-      e.workEmail = "A valid email address is required.";
-    if (!enterpriseFields.phone.trim()) e.phone = "Phone number is required.";
-    if (!enterpriseFields.projectNeed) e.projectNeed = "Please select a project need.";
-    return e;
-  };
+	const resetModal = () => {
+		setStep(1);
+		setClientType(null);
+		setErrors({});
+		setIsSubmitting(false);
+		setEnterpriseFields({
+			orgName: '',
+			contactName: '',
+			contactTitle: '',
+			workEmail: '',
+			phone: '',
+			projectNeed: '',
+			scopeDetails: '',
+		});
+		setEducationFields({
+			institutionName: '',
+			repName: '',
+			repTitle: '',
+			email: '',
+			phone: '',
+			enrollment: '',
+			solutions: [],
+			additionalContext: '',
+		});
+	};
 
-  const validateEducation = () => {
-    const e: Record<string, string> = {};
-    if (!educationFields.institutionName.trim()) e.institutionName = "Institution name is required.";
-    if (!educationFields.repName.trim()) e.repName = "Representative name is required.";
-    if (!educationFields.email.trim() || !educationFields.email.includes("@"))
-      e.email = "A valid email address is required.";
-    if (!educationFields.phone.trim()) e.phone = "Phone number is required.";
-    if (!educationFields.enrollment) e.enrollment = "Please select enrollment range.";
-    if (educationFields.solutions.length === 0) e.solutions = "Select at least one solution.";
-    return e;
-  };
+	const handleClose = () => {
+		onClose();
+		window.setTimeout(resetModal, 250);
+	};
 
-  const handleSubmit = async () => {
-    const errs =
-      clientType === "enterprise" ? validateEnterprise() : validateEducation();
-    if (Object.keys(errs).length > 0) {
-      setErrors(errs);
-      return;
-    }
-    setIsSubmitting(true);
-    // Simulate async submit (replace with real API call)
-    await new Promise((r) => setTimeout(r, 1400));
-    setIsSubmitting(false);
-    setStep(3);
-  };
+	const handleSelectType = (type: ClientType) => {
+		setClientType(type);
+		setStep(2);
+		setErrors({});
+	};
 
-  const fieldClass = (name: string) =>
-    `w-full px-3 py-2.5 text-sm border rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue ${
-      errors[name]
-        ? "border-red-300 bg-red-50 focus:ring-red-200 focus:border-red-400"
-        : "border-slate-200 bg-white text-slate-700 placeholder:text-slate-400"
-    }`;
+	const toggleSolution = (solution: string) => {
+		setEducationFields((prev) => ({
+			...prev,
+			solutions: prev.solutions.includes(solution)
+				? prev.solutions.filter((item) => item !== solution)
+				: [...prev.solutions, solution],
+		}));
+	};
 
-  if (!isOpen) return null;
+	const validateEnterprise = () => {
+		const nextErrors: Record<string, string> = {};
+		if (!enterpriseFields.orgName.trim())
+			nextErrors.orgName = 'Organization name is required.';
+		if (!enterpriseFields.contactName.trim())
+			nextErrors.contactName = 'Contact name is required.';
+		if (
+			!enterpriseFields.workEmail.trim() ||
+			!enterpriseFields.workEmail.includes('@')
+		) {
+			nextErrors.workEmail = 'A valid email address is required.';
+		}
+		if (!enterpriseFields.phone.trim())
+			nextErrors.phone = 'Phone number is required.';
+		if (!enterpriseFields.projectNeed)
+			nextErrors.projectNeed = 'Please select a project need.';
+		return nextErrors;
+	};
 
-  return (
-    <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modal-title"
-      onKeyDown={handleKeyDown}
-    >
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/50 modal-backdrop animate-fade-in"
-        onClick={handleClose}
-        aria-hidden="true"
-      />
+	const validateEducation = () => {
+		const nextErrors: Record<string, string> = {};
+		if (!educationFields.institutionName.trim())
+			nextErrors.institutionName = 'Institution name is required.';
+		if (!educationFields.repName.trim())
+			nextErrors.repName = 'Representative name is required.';
+		if (!educationFields.email.trim() || !educationFields.email.includes('@')) {
+			nextErrors.email = 'A valid email address is required.';
+		}
+		if (!educationFields.phone.trim())
+			nextErrors.phone = 'Phone number is required.';
+		if (!educationFields.enrollment)
+			nextErrors.enrollment = 'Please select enrollment range.';
+		if (educationFields.solutions.length === 0)
+			nextErrors.solutions = 'Select at least one solution.';
+		return nextErrors;
+	};
 
-      {/* Panel */}
-      <div
-        ref={modalRef}
-        className="relative w-full max-w-[560px] bg-white rounded-lg shadow-2xl flex flex-col max-h-[90vh] animate-slide-up"
-      >
-        {/* Modal header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 flex-shrink-0">
-          <div>
-            <h2
-              id="modal-title"
-              className="font-display font-bold text-brand-neutral-dark text-base"
-            >
-              {step === 3
-                ? "Request Received"
-                : step === 1
-                ? "Partner With UTECHS"
-                : clientType === "enterprise"
-                ? "Enterprise Partnership Inquiry"
-                : "School Partnership Inquiry"}
-            </h2>
-            {step !== 3 && (
-              <p className="text-xs text-slate-400 mt-0.5">
-                Step {step} of 2 — {step === 1 ? "Select your type" : "Fill in your details"}
-              </p>
-            )}
-          </div>
-          <button
-            ref={firstFocusRef}
-            onClick={handleClose}
-            className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors flex-shrink-0"
-            aria-label="Close modal"
-          >
-            <X size={18} />
-          </button>
-        </div>
+	const handleSubmit = async () => {
+		const nextErrors =
+			clientType === 'enterprise' ? validateEnterprise() : validateEducation();
+		if (Object.keys(nextErrors).length > 0) {
+			setErrors(nextErrors);
+			return;
+		}
 
-        {/* Progress bar */}
-        {step !== 3 && (
-          <div className="h-1 bg-slate-100 flex-shrink-0">
-            <div
-              className="h-full bg-brand-blue transition-all duration-500 rounded-full"
-              style={{ width: step === 1 ? "50%" : "100%" }}
-            />
-          </div>
-        )}
+		setErrors({});
+		setIsSubmitting(true);
+		await new Promise((resolve) => setTimeout(resolve, 1400));
+		setIsSubmitting(false);
+		setStep(3);
+	};
 
-        {/* Scrollable body */}
-        <div className="overflow-y-auto flex-1 px-6 py-5">
-          {/* Step 1: Type selection */}
-          {step === 1 && (
-            <div className="space-y-3 animate-fade-in">
-              <p className="text-sm text-slate-500 mb-5">
-                Tell us who you are so we can tailor our response to your specific needs.
-              </p>
-              <button
-                onClick={() => handleSelectType("enterprise")}
-                className="w-full flex items-start gap-4 p-5 rounded-lg border-2 border-slate-200 hover:border-brand-blue hover:bg-brand-blue-light/40 transition-all duration-200 text-left group"
-              >
-                <div className="w-11 h-11 rounded-lg bg-brand-blue-light text-brand-blue flex items-center justify-center flex-shrink-0 group-hover:bg-brand-blue group-hover:text-white transition-colors">
-                  <Building2 size={20} />
-                </div>
-                <div>
-                  <div className="font-display font-semibold text-brand-neutral-dark text-sm mb-1">
-                    Enterprise Client
-                  </div>
-                  <div className="text-slate-500 text-xs leading-relaxed">
-                    Business, Government Agency, NGO, or Financial Institution seeking network infrastructure, security, solar systems, or software development.
-                  </div>
-                </div>
-              </button>
+	// No cursor-pointer on text inputs — only buttons, selects, and links get that
+	const fieldClass = (name: string) =>
+		`w-full border px-3 py-2.5 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-brand-blue/25 ${
+			errors[name]
+				? 'border-red-300 bg-red-50 text-slate-800 focus:border-red-400 focus:ring-red-200'
+				: 'border-slate-200 bg-white text-slate-700 placeholder:text-slate-400 hover:border-slate-300 focus:border-brand-blue'
+		}`;
 
-              <button
-                onClick={() => handleSelectType("education")}
-                className="w-full flex items-start gap-4 p-5 rounded-lg border-2 border-slate-200 hover:border-brand-green hover:bg-brand-green-light/60 transition-all duration-200 text-left group"
-              >
-                <div className="w-11 h-11 rounded-lg bg-brand-green-light text-brand-green-dark flex items-center justify-center flex-shrink-0 group-hover:bg-brand-green group-hover:text-white transition-colors">
-                  <GraduationCap size={20} />
-                </div>
-                <div>
-                  <div className="font-display font-semibold text-brand-neutral-dark text-sm mb-1">
-                    Educational Institution
-                  </div>
-                  <div className="text-slate-500 text-xs leading-relaxed">
-                    Primary school, high school, college, or university interested in the Computer Lab as a Service (CaaS) partnership program.
-                  </div>
-                </div>
-              </button>
-            </div>
-          )}
+	// Selects need cursor-pointer since they open a picker
+	const selectClass = (name: string) => `${fieldClass(name)} cursor-pointer`;
 
-          {/* Step 2: Enterprise form */}
-          {step === 2 && clientType === "enterprise" && (
-            <div className="space-y-4 animate-fade-in">
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">
-                  Organization Name <span className="text-red-400">*</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Liberia Revenue Authority"
-                  value={enterpriseFields.orgName}
-                  onChange={(e) =>
-                    setEnterpriseFields((p) => ({ ...p, orgName: e.target.value }))
-                  }
-                  className={fieldClass("orgName")}
-                />
-                {errors.orgName && (
-                  <p className="text-red-500 text-[11px] mt-1">{errors.orgName}</p>
-                )}
-              </div>
+	if (!isOpen) return null;
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">
-                    Contact Person <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Full name"
-                    value={enterpriseFields.contactName}
-                    onChange={(e) =>
-                      setEnterpriseFields((p) => ({ ...p, contactName: e.target.value }))
-                    }
-                    className={fieldClass("contactName")}
-                  />
-                  {errors.contactName && (
-                    <p className="text-red-500 text-[11px] mt-1">{errors.contactName}</p>
-                  )}
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">
-                    Job Title
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. IT Director"
-                    value={enterpriseFields.contactTitle}
-                    onChange={(e) =>
-                      setEnterpriseFields((p) => ({ ...p, contactTitle: e.target.value }))
-                    }
-                    className={fieldClass("contactTitle")}
-                  />
-                </div>
-              </div>
+	const isEnterprise = clientType === 'enterprise';
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">
-                    Work Email <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    placeholder="you@organization.com"
-                    value={enterpriseFields.workEmail}
-                    onChange={(e) =>
-                      setEnterpriseFields((p) => ({ ...p, workEmail: e.target.value }))
-                    }
-                    className={fieldClass("workEmail")}
-                  />
-                  {errors.workEmail && (
-                    <p className="text-red-500 text-[11px] mt-1">{errors.workEmail}</p>
-                  )}
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">
-                    Phone Number <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    type="tel"
-                    placeholder="+231 ..."
-                    value={enterpriseFields.phone}
-                    onChange={(e) =>
-                      setEnterpriseFields((p) => ({ ...p, phone: e.target.value }))
-                    }
-                    className={fieldClass("phone")}
-                  />
-                  {errors.phone && (
-                    <p className="text-red-500 text-[11px] mt-1">{errors.phone}</p>
-                  )}
-                </div>
-              </div>
+	const goBack = () => {
+		setStep(1);
+		setErrors({});
+	};
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">
-                  Core Project Need <span className="text-red-400">*</span>
-                </label>
-                <select
-                  value={enterpriseFields.projectNeed}
-                  onChange={(e) =>
-                    setEnterpriseFields((p) => ({ ...p, projectNeed: e.target.value }))
-                  }
-                  className={fieldClass("projectNeed")}
-                >
-                  <option value="">Select a category...</option>
-                  {PROJECT_NEEDS.map((need) => (
-                    <option key={need} value={need}>
-                      {need}
-                    </option>
-                  ))}
-                </select>
-                {errors.projectNeed && (
-                  <p className="text-red-500 text-[11px] mt-1">{errors.projectNeed}</p>
-                )}
-              </div>
+	return (
+		<div
+			className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5"
+			role="dialog"
+			aria-modal="true"
+			aria-labelledby="partner-modal-title"
+			onKeyDown={handleKeyDown}
+		>
+			<div
+				className="absolute inset-0 cursor-pointer bg-slate-950/70 modal-backdrop animate-fade-in"
+				onClick={handleClose}
+				aria-hidden="true"
+			/>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">
-                  Project Scope Details
-                </label>
-                <textarea
-                  rows={3}
-                  placeholder="Briefly describe your project requirements, timeline, or any context that will help us prepare a relevant response..."
-                  value={enterpriseFields.scopeDetails}
-                  onChange={(e) =>
-                    setEnterpriseFields((p) => ({ ...p, scopeDetails: e.target.value }))
-                  }
-                  className={`${fieldClass("scopeDetails")} resize-none`}
-                />
-              </div>
-            </div>
-          )}
+			<div
+				ref={modalRef}
+				className="relative grid h-[92dvh] max-h-[92dvh] w-full max-w-5xl overflow-hidden bg-white shadow-2xl animate-slide-up lg:grid-cols-[0.85fr_1.15fr]"
+			>
+				<aside className="relative hidden overflow-hidden bg-slate-950 p-7 text-white lg:block">
+					<div className="absolute inset-0 dark-tech-grid opacity-30" />
+					<div className="relative flex h-full flex-col">
+						<div>
+							<p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-brand-green">
+								Partnership intake
+							</p>
+							<h2
+								className="mt-4 font-display text-3xl font-extrabold leading-tight"
+								id="partner-modal-title"
+							>
+								Let&apos;s scope the right UTECHS team for your project.
+							</h2>
+							<p className="mt-4 text-sm leading-7 text-white/58">
+								Tell us whether you are building a digital product, upgrading
+								infrastructure, buying ICT equipment, or launching a school lab
+								program.
+							</p>
+						</div>
 
-          {/* Step 2: Education form */}
-          {step === 2 && clientType === "education" && (
-            <div className="space-y-4 animate-fade-in">
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">
-                  Institution Name <span className="text-red-400">*</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Upstairs Christian Academy"
-                  value={educationFields.institutionName}
-                  onChange={(e) =>
-                    setEducationFields((p) => ({ ...p, institutionName: e.target.value }))
-                  }
-                  className={fieldClass("institutionName")}
-                />
-                {errors.institutionName && (
-                  <p className="text-red-500 text-[11px] mt-1">{errors.institutionName}</p>
-                )}
-              </div>
+						<div className="mt-8 grid gap-3">
+							{MODAL_SIGNALS.map(({ icon: Icon, label }) => (
+								<div
+									key={label}
+									className="flex items-center gap-3 border border-white/10 bg-white/[0.06] p-3"
+								>
+									<span className="flex h-9 w-9 items-center justify-center bg-brand-green text-slate-950">
+										<Icon size={18} />
+									</span>
+									<span className="text-sm font-bold text-white/78">
+										{label}
+									</span>
+								</div>
+							))}
+						</div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">
-                    Representative Name <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Full name"
-                    value={educationFields.repName}
-                    onChange={(e) =>
-                      setEducationFields((p) => ({ ...p, repName: e.target.value }))
-                    }
-                    className={fieldClass("repName")}
-                  />
-                  {errors.repName && (
-                    <p className="text-red-500 text-[11px] mt-1">{errors.repName}</p>
-                  )}
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">
-                    Title / Role
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Principal"
-                    value={educationFields.repTitle}
-                    onChange={(e) =>
-                      setEducationFields((p) => ({ ...p, repTitle: e.target.value }))
-                    }
-                    className={fieldClass("repTitle")}
-                  />
-                </div>
-              </div>
+						<div className="mt-auto border-t border-white/10 pt-6">
+							<p className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/34">
+								Direct line
+							</p>
+							<div className="mt-4 space-y-3">
+								<a
+									href="tel:0555532355"
+									className="flex cursor-pointer items-center gap-3 text-sm text-white/72 hover:text-brand-green"
+								>
+									<Phone size={16} />
+									0555 532 355
+								</a>
+								<a
+									href="mailto:uniquetechsolutions2022@gmail.com"
+									className="flex cursor-pointer items-center gap-3 text-sm text-white/72 hover:text-brand-green"
+								>
+									<Mail size={16} />
+									uniquetechsolutions2022@gmail.com
+								</a>
+							</div>
+						</div>
+					</div>
+				</aside>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">
-                    Email Address <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    placeholder="school@example.com"
-                    value={educationFields.email}
-                    onChange={(e) =>
-                      setEducationFields((p) => ({ ...p, email: e.target.value }))
-                    }
-                    className={fieldClass("email")}
-                  />
-                  {errors.email && (
-                    <p className="text-red-500 text-[11px] mt-1">{errors.email}</p>
-                  )}
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">
-                    Phone Number <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    type="tel"
-                    placeholder="+231 ..."
-                    value={educationFields.phone}
-                    onChange={(e) =>
-                      setEducationFields((p) => ({ ...p, phone: e.target.value }))
-                    }
-                    className={fieldClass("phone")}
-                  />
-                  {errors.phone && (
-                    <p className="text-red-500 text-[11px] mt-1">{errors.phone}</p>
-                  )}
-                </div>
-              </div>
+				<section className="flex h-full min-h-0 flex-col overflow-hidden">
+					<div className="flex items-start justify-between gap-4 border-b border-slate-100 px-5 py-4 sm:px-7">
+						<div>
+							<p className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-brand-blue">
+								{step === 3 ? 'Request received' : `Step ${step} of 2`}
+							</p>
+							<h2
+								className="mt-1 font-display text-lg font-extrabold text-brand-neutral-dark lg:hidden"
+								id="partner-modal-title"
+							>
+								Partner With UTECHS
+							</h2>
+							<h3 className="mt-1 hidden font-display text-lg font-extrabold text-brand-neutral-dark lg:block">
+								{step === 3
+									? 'We have what we need to begin.'
+									: step === 1
+										? 'Choose the partnership path.'
+										: isEnterprise
+											? 'Enterprise project details.'
+											: 'School lab program details.'}
+							</h3>
+						</div>
+						<button
+							ref={closeRef}
+							onClick={handleClose}
+							className="flex h-9 w-9 flex-shrink-0 cursor-pointer items-center justify-center text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+							aria-label="Close modal"
+						>
+							<X size={19} />
+						</button>
+					</div>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">
-                  Approximate Student Enrollment <span className="text-red-400">*</span>
-                </label>
-                <select
-                  value={educationFields.enrollment}
-                  onChange={(e) =>
-                    setEducationFields((p) => ({ ...p, enrollment: e.target.value }))
-                  }
-                  className={fieldClass("enrollment")}
-                >
-                  <option value="">Select enrollment range...</option>
-                  {ENROLLMENT_RANGES.map((r) => (
-                    <option key={r} value={r}>
-                      {r}
-                    </option>
-                  ))}
-                </select>
-                {errors.enrollment && (
-                  <p className="text-red-500 text-[11px] mt-1">{errors.enrollment}</p>
-                )}
-              </div>
+					{step !== 3 && (
+						<div className="h-1 bg-slate-100">
+							<div
+								className="h-full bg-brand-blue transition-all duration-500"
+								style={{ width: step === 1 ? '50%' : '100%' }}
+							/>
+						</div>
+					)}
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-2">
-                  Solutions of Interest <span className="text-red-400">*</span>
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  {EDUCATION_SOLUTIONS.map((sol) => {
-                    const checked = educationFields.solutions.includes(sol);
-                    return (
-                      <button
-                        key={sol}
-                        type="button"
-                        onClick={() => toggleSolution(sol)}
-                        className={`flex items-center gap-2 px-3 py-2.5 rounded-lg border text-xs font-medium text-left transition-all duration-150 ${
-                          checked
-                            ? "border-brand-green bg-brand-green-light text-brand-green-dark"
-                            : "border-slate-200 bg-white text-slate-600 hover:border-brand-green/40"
-                        }`}
-                        aria-pressed={checked}
-                      >
-                        <span
-                          className={`w-4 h-4 rounded border-2 flex-shrink-0 flex items-center justify-center transition-colors ${
-                            checked
-                              ? "border-brand-green bg-brand-green"
-                              : "border-slate-300"
-                          }`}
-                        >
-                          {checked && (
-                            <svg
-                              viewBox="0 0 10 10"
-                              className="w-2.5 h-2.5 text-white"
-                              fill="currentColor"
-                            >
-                              <path d="M1.5 5.5l2.5 2.5 4.5-4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-                            </svg>
-                          )}
-                        </span>
-                        {sol}
-                      </button>
-                    );
-                  })}
-                </div>
-                {errors.solutions && (
-                  <p className="text-red-500 text-[11px] mt-1">{errors.solutions}</p>
-                )}
-              </div>
+					<div className="min-h-0 flex-1 overflow-y-auto px-5 py-5 sm:px-7">
+						{step === 1 && (
+							<div className="space-y-4 animate-fade-in">
+								<p className="text-sm leading-6 text-slate-500">
+									Choose the closest fit. We use this to shape the questions and
+									route your request.
+								</p>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">
-                  Additional Lab Context
-                </label>
-                <textarea
-                  rows={3}
-                  placeholder="Do you have an existing lab space? Current equipment? Any special requirements or questions about the program?"
-                  value={educationFields.additionalContext}
-                  onChange={(e) =>
-                    setEducationFields((p) => ({ ...p, additionalContext: e.target.value }))
-                  }
-                  className={`${fieldClass("additionalContext")} resize-none`}
-                />
-              </div>
-            </div>
-          )}
+								<button
+									onClick={() => handleSelectType('enterprise')}
+									className="group grid w-full cursor-pointer gap-4 border-2 border-slate-200 p-5 text-left transition hover:border-brand-blue hover:bg-brand-blue-light/35 sm:grid-cols-[auto_1fr_auto]"
+								>
+									<span className="flex h-12 w-12 items-center justify-center bg-brand-blue-light text-brand-blue transition group-hover:bg-brand-blue group-hover:text-white">
+										<Building2 size={22} />
+									</span>
+									<span>
+										<span className="block font-display text-base font-extrabold text-brand-neutral-dark">
+											Enterprise, NGO, Government, or Business
+										</span>
+										<span className="mt-2 block text-sm leading-6 text-slate-500">
+											Websites, portals, APIs, network infrastructure,
+											cybersecurity, solar systems, ICT equipment procurement,
+											and managed IT support.
+										</span>
+									</span>
+									<ArrowRight
+										size={19}
+										className="hidden text-slate-300 transition group-hover:translate-x-1 group-hover:text-brand-blue sm:block"
+									/>
+								</button>
 
-          {/* Step 3: Success */}
-          {step === 3 && (
-            <div className="flex flex-col items-center text-center py-6 animate-fade-in">
-              <div className="w-16 h-16 rounded-full bg-brand-green-light flex items-center justify-center mb-5">
-                <CheckCircle2 size={32} className="text-brand-green" />
-              </div>
-              <h3 className="font-display font-bold text-brand-neutral-dark text-lg mb-2">
-                Thank you for reaching out!
-              </h3>
-              <p className="text-slate-500 text-sm leading-relaxed max-w-sm">
-                A UTECHS representative will review your project requirements and contact you within{" "}
-                <span className="font-semibold text-brand-blue">24 business hours</span>.
-              </p>
-              <div className="mt-6 pt-5 border-t border-slate-100 w-full text-left">
-                <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-3">
-                  You can also reach us directly
-                </p>
-                <div className="flex flex-col gap-2 text-sm">
-                  <a
-                    href="tel:0555532355"
-                    className="text-brand-blue hover:underline font-medium"
-                  >
-                    📞 0555532355
-                  </a>
-                  <a
-                    href="tel:0779373928"
-                    className="text-brand-blue hover:underline font-medium"
-                  >
-                    📞 0779373928
-                  </a>
-                  <a
-                    href="mailto:uniquetechsolutions2022@gmail.com"
-                    className="text-brand-blue hover:underline font-medium"
-                  >
-                    ✉ uniquetechsolutions2022@gmail.com
-                  </a>
-                </div>
-              </div>
-              <button
-                onClick={handleClose}
-                className="mt-6 btn-primary w-full justify-center"
-              >
-                Close
-              </button>
-            </div>
-          )}
-        </div>
+								<button
+									onClick={() => handleSelectType('education')}
+									className="group grid w-full cursor-pointer gap-4 border-2 border-slate-200 p-5 text-left transition hover:border-brand-green hover:bg-brand-green-light/55 sm:grid-cols-[auto_1fr_auto]"
+								>
+									<span className="flex h-12 w-12 items-center justify-center bg-brand-green-light text-brand-green-dark transition group-hover:bg-brand-green group-hover:text-white">
+										<GraduationCap size={22} />
+									</span>
+									<span>
+										<span className="block font-display text-base font-extrabold text-brand-neutral-dark">
+											School, College, or University
+										</span>
+										<span className="mt-2 block text-sm leading-6 text-slate-500">
+											Managed computer labs, NComputing deployments, instructor
+											staffing, curriculum integration, maintenance, and student
+											fee program setup.
+										</span>
+									</span>
+									<ArrowRight
+										size={19}
+										className="hidden text-slate-300 transition group-hover:translate-x-1 group-hover:text-brand-green sm:block"
+									/>
+								</button>
+							</div>
+						)}
 
-        {/* Footer actions */}
-        {step === 2 && (
-          <div className="px-6 py-4 border-t border-slate-100 flex items-center justify-between gap-3 flex-shrink-0 bg-slate-50 rounded-b-2xl">
-            <button
-              onClick={() => {
-                setStep(1);
-                setErrors({});
-              }}
-              className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 font-medium transition-colors"
-            >
-              <ChevronLeft size={15} />
-              Back
-            </button>
-            <button
-              onClick={handleSubmit}
-              disabled={isSubmitting}
-              className="btn-primary disabled:opacity-70 disabled:cursor-not-allowed min-w-[140px] justify-center"
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 size={15} className="animate-spin" />
-                  Submitting...
-                </>
-              ) : (
-                "Submit Inquiry"
-              )}
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+						{step === 2 && clientType === 'enterprise' && (
+							<div className="space-y-4 animate-fade-in">
+								<div className="grid gap-4 sm:grid-cols-2">
+									<Field
+										label="Organization Name"
+										error={errors.orgName}
+										required
+									>
+										<input
+											type="text"
+											placeholder="e.g. Liberia Revenue Authority"
+											value={enterpriseFields.orgName}
+											onChange={(event) =>
+												setEnterpriseFields((prev) => ({
+													...prev,
+													orgName: event.target.value,
+												}))
+											}
+											className={fieldClass('orgName')}
+										/>
+									</Field>
+									<Field
+										label="Contact Person"
+										error={errors.contactName}
+										required
+									>
+										<input
+											type="text"
+											placeholder="Full name"
+											value={enterpriseFields.contactName}
+											onChange={(event) =>
+												setEnterpriseFields((prev) => ({
+													...prev,
+													contactName: event.target.value,
+												}))
+											}
+											className={fieldClass('contactName')}
+										/>
+									</Field>
+								</div>
+
+								<div className="grid gap-4 sm:grid-cols-2">
+									<Field label="Job Title">
+										<input
+											type="text"
+											placeholder="e.g. IT Director"
+											value={enterpriseFields.contactTitle}
+											onChange={(event) =>
+												setEnterpriseFields((prev) => ({
+													...prev,
+													contactTitle: event.target.value,
+												}))
+											}
+											className={fieldClass('contactTitle')}
+										/>
+									</Field>
+									<Field label="Phone Number" error={errors.phone} required>
+										<input
+											type="tel"
+											placeholder="+231 ..."
+											value={enterpriseFields.phone}
+											onChange={(event) =>
+												setEnterpriseFields((prev) => ({
+													...prev,
+													phone: event.target.value,
+												}))
+											}
+											className={fieldClass('phone')}
+										/>
+									</Field>
+								</div>
+
+								<Field label="Work Email" error={errors.workEmail} required>
+									<input
+										type="email"
+										placeholder="you@organization.com"
+										value={enterpriseFields.workEmail}
+										onChange={(event) =>
+											setEnterpriseFields((prev) => ({
+												...prev,
+												workEmail: event.target.value,
+											}))
+										}
+										className={fieldClass('workEmail')}
+									/>
+								</Field>
+
+								<Field
+									label="Core Project Need"
+									error={errors.projectNeed}
+									required
+								>
+									<select
+										value={enterpriseFields.projectNeed}
+										onChange={(event) =>
+											setEnterpriseFields((prev) => ({
+												...prev,
+												projectNeed: event.target.value,
+											}))
+										}
+										className={selectClass('projectNeed')}
+									>
+										<option value="">Select a category...</option>
+										{PROJECT_NEEDS.map((need) => (
+											<option key={need} value={need}>
+												{need}
+											</option>
+										))}
+									</select>
+								</Field>
+
+								<Field label="Project Scope Details">
+									<textarea
+										rows={4}
+										placeholder="Briefly describe requirements, timeline, current systems, procurement needs, or decision context..."
+										value={enterpriseFields.scopeDetails}
+										onChange={(event) =>
+											setEnterpriseFields((prev) => ({
+												...prev,
+												scopeDetails: event.target.value,
+											}))
+										}
+										className={`${fieldClass('scopeDetails')} resize-none`}
+									/>
+								</Field>
+							</div>
+						)}
+
+						{step === 2 && clientType === 'education' && (
+							<div className="space-y-4 animate-fade-in">
+								<div className="grid gap-4 sm:grid-cols-2">
+									<Field
+										label="Institution Name"
+										error={errors.institutionName}
+										required
+									>
+										<input
+											type="text"
+											placeholder="e.g. Upstairs Christian Academy"
+											value={educationFields.institutionName}
+											onChange={(event) =>
+												setEducationFields((prev) => ({
+													...prev,
+													institutionName: event.target.value,
+												}))
+											}
+											className={fieldClass('institutionName')}
+										/>
+									</Field>
+									<Field
+										label="Representative Name"
+										error={errors.repName}
+										required
+									>
+										<input
+											type="text"
+											placeholder="Full name"
+											value={educationFields.repName}
+											onChange={(event) =>
+												setEducationFields((prev) => ({
+													...prev,
+													repName: event.target.value,
+												}))
+											}
+											className={fieldClass('repName')}
+										/>
+									</Field>
+								</div>
+
+								<div className="grid gap-4 sm:grid-cols-2">
+									<Field label="Title / Role">
+										<input
+											type="text"
+											placeholder="e.g. Principal"
+											value={educationFields.repTitle}
+											onChange={(event) =>
+												setEducationFields((prev) => ({
+													...prev,
+													repTitle: event.target.value,
+												}))
+											}
+											className={fieldClass('repTitle')}
+										/>
+									</Field>
+									<Field label="Phone Number" error={errors.phone} required>
+										<input
+											type="tel"
+											placeholder="+231 ..."
+											value={educationFields.phone}
+											onChange={(event) =>
+												setEducationFields((prev) => ({
+													...prev,
+													phone: event.target.value,
+												}))
+											}
+											className={fieldClass('phone')}
+										/>
+									</Field>
+								</div>
+
+								<div className="grid gap-4 sm:grid-cols-2">
+									<Field label="Email Address" error={errors.email} required>
+										<input
+											type="email"
+											placeholder="school@example.com"
+											value={educationFields.email}
+											onChange={(event) =>
+												setEducationFields((prev) => ({
+													...prev,
+													email: event.target.value,
+												}))
+											}
+											className={fieldClass('email')}
+										/>
+									</Field>
+									<Field
+										label="Student Enrollment"
+										error={errors.enrollment}
+										required
+									>
+										<select
+											value={educationFields.enrollment}
+											onChange={(event) =>
+												setEducationFields((prev) => ({
+													...prev,
+													enrollment: event.target.value,
+												}))
+											}
+											className={selectClass('enrollment')}
+										>
+											<option value="">Select range...</option>
+											{ENROLLMENT_RANGES.map((range) => (
+												<option key={range} value={range}>
+													{range}
+												</option>
+											))}
+										</select>
+									</Field>
+								</div>
+
+								<Field
+									label="Solutions of Interest"
+									error={errors.solutions}
+									required
+								>
+									<div className="grid gap-2 sm:grid-cols-2">
+										{EDUCATION_SOLUTIONS.map((solution) => {
+											const checked =
+												educationFields.solutions.includes(solution);
+											return (
+												<button
+													key={solution}
+													type="button"
+													onClick={() => toggleSolution(solution)}
+													className={`flex cursor-pointer items-center gap-2 border px-3 py-2.5 text-left text-xs font-bold transition ${
+														checked
+															? 'border-brand-green bg-brand-green-light text-brand-green-dark'
+															: 'border-slate-200 bg-white text-slate-600 hover:border-brand-green/40'
+													}`}
+													aria-pressed={checked}
+												>
+													<span
+														className={`flex h-4 w-4 flex-shrink-0 items-center justify-center border ${
+															checked
+																? 'border-brand-green bg-brand-green'
+																: 'border-slate-300'
+														}`}
+													>
+														{checked && (
+															<CheckCircle2 size={11} className="text-white" />
+														)}
+													</span>
+													{solution}
+												</button>
+											);
+										})}
+									</div>
+								</Field>
+
+								<Field label="Additional Lab Context">
+									<textarea
+										rows={3}
+										placeholder="Existing lab space, current equipment, connectivity, schedule, or special requirements..."
+										value={educationFields.additionalContext}
+										onChange={(event) =>
+											setEducationFields((prev) => ({
+												...prev,
+												additionalContext: event.target.value,
+											}))
+										}
+										className={`${fieldClass('additionalContext')} resize-none`}
+									/>
+								</Field>
+							</div>
+						)}
+
+						{step === 3 && (
+							<div className="flex min-h-[360px] flex-col items-center justify-center text-center animate-fade-in">
+								<div className="mb-5 flex h-16 w-16 items-center justify-center bg-brand-green-light text-brand-green">
+									<CheckCircle2 size={34} />
+								</div>
+								<h3 className="font-display text-2xl font-extrabold text-brand-neutral-dark">
+									Thank you for reaching out.
+								</h3>
+								<p className="mt-3 max-w-md text-sm leading-7 text-slate-500">
+									A UTECHS representative will review your request and contact
+									you within 24 business hours.
+								</p>
+								<div className="mt-7 grid w-full max-w-md gap-3 text-left sm:grid-cols-2">
+									<a
+										href="tel:0555532355"
+										className="cursor-pointer border border-slate-200 p-4 text-sm font-bold text-brand-blue hover:bg-brand-blue-light"
+									>
+										<Phone size={16} className="mb-2" />
+										0555 532 355
+									</a>
+									<a
+										href="mailto:uniquetechsolutions2022@gmail.com"
+										className="cursor-pointer border border-slate-200 p-4 text-sm font-bold text-brand-blue hover:bg-brand-blue-light"
+									>
+										<Mail size={16} className="mb-2" />
+										Email UTECHS
+									</a>
+								</div>
+								<button
+									onClick={handleClose}
+									className="btn-primary mt-7 cursor-pointer justify-center"
+								>
+									Close
+								</button>
+							</div>
+						)}
+					</div>
+
+					{step === 2 && (
+						<div className="flex flex-shrink-0 items-center justify-between gap-3 border-t border-slate-100 bg-slate-50 px-5 py-4 sm:px-7">
+							<button
+								onClick={goBack}
+								className="inline-flex cursor-pointer items-center gap-1.5 text-sm font-bold text-slate-500 transition hover:text-slate-800"
+							>
+								<ChevronLeft size={15} />
+								Back
+							</button>
+							<button
+								onClick={handleSubmit}
+								disabled={isSubmitting}
+								className="btn-primary min-w-[150px] cursor-pointer justify-center disabled:cursor-not-allowed disabled:opacity-70"
+							>
+								{isSubmitting ? (
+									<>
+										<Loader2 size={15} className="animate-spin" />
+										Submitting...
+									</>
+								) : (
+									'Submit Inquiry'
+								)}
+							</button>
+						</div>
+					)}
+				</section>
+			</div>
+		</div>
+	);
+}
+
+function Field({
+	children,
+	error,
+	label,
+	required,
+}: {
+	children: React.ReactNode;
+	error?: string;
+	label: string;
+	required?: boolean;
+}) {
+	return (
+		<label className="block">
+			<span className="mb-1.5 block text-xs font-extrabold uppercase tracking-wide text-slate-600">
+				{label} {required && <span className="text-red-400">*</span>}
+			</span>
+			{children}
+			{error && (
+				<span className="mt-1 block text-[11px] font-medium text-red-500">
+					{error}
+				</span>
+			)}
+		</label>
+	);
 }

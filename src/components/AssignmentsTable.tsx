@@ -1,7 +1,7 @@
 'use client';
 
-import { useMemo, useState, type ElementType } from 'react';
-import { Briefcase, Building2, CheckCircle2, Filter, GraduationCap, Hospital, Landmark, Network, Search } from 'lucide-react';
+import { useEffect, useMemo, useState, type ElementType } from 'react';
+import { Briefcase, Building2, CheckCircle2, ChevronLeft, ChevronRight, Filter, GraduationCap, Hospital, Landmark, Network, Search } from 'lucide-react';
 
 type Category = 'All' | 'Healthcare' | 'Banking' | 'Government' | 'Higher Ed' | 'Infrastructure';
 
@@ -124,9 +124,12 @@ const SECTOR_STYLES: Record<Category | string, string> = {
 	Infrastructure: 'bg-slate-50 text-slate-600 border-slate-200',
 };
 
+const PAGE_SIZE = 5;
+
 export default function AssignmentsTable() {
 	const [search, setSearch] = useState('');
 	const [activeFilter, setActiveFilter] = useState<Category>('All');
+	const [page, setPage] = useState(1);
 
 	const filtered = useMemo(() => {
 		return ASSIGNMENTS.filter((assignment) => {
@@ -142,6 +145,17 @@ export default function AssignmentsTable() {
 			return matchesSector && matchesSearch;
 		});
 	}, [activeFilter, search]);
+
+	useEffect(() => {
+		setPage(1);
+	}, [activeFilter, search]);
+
+	const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+	const currentPage = Math.min(page, totalPages);
+	const pageStart = (currentPage - 1) * PAGE_SIZE;
+	const paginated = filtered.slice(pageStart, pageStart + PAGE_SIZE);
+	const showingStart = filtered.length === 0 ? 0 : pageStart + 1;
+	const showingEnd = Math.min(pageStart + PAGE_SIZE, filtered.length);
 
 	return (
 		<section id="track-record" className="section-padding relative overflow-hidden bg-white" aria-label="Assignment History">
@@ -180,7 +194,7 @@ export default function AssignmentsTable() {
 							<p className="text-xs text-slate-500">Filter by sector or search for technologies, clients, and scope.</p>
 						</div>
 						<p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-400">
-							Showing {filtered.length} of {ASSIGNMENTS.length}
+							Showing {showingStart}-{showingEnd} of {filtered.length}
 						</p>
 					</div>
 
@@ -237,7 +251,7 @@ export default function AssignmentsTable() {
 									</tr>
 								</thead>
 								<tbody>
-									{filtered.map((assignment, index) => (
+									{paginated.map((assignment, index) => (
 										<tr
 											key={assignment.client}
 											className={`border-b border-slate-100 transition-colors hover:bg-brand-blue-light/35 ${
@@ -268,7 +282,7 @@ export default function AssignmentsTable() {
 						</div>
 
 						<div className="grid gap-4 md:hidden">
-							{filtered.map((assignment) => (
+							{paginated.map((assignment) => (
 								<article key={assignment.client} className="border border-slate-200 bg-white p-4 shadow-lg shadow-slate-200/60">
 									<div className="mb-3 flex items-start justify-between gap-3">
 										<h3 className="text-sm font-bold leading-tight text-brand-neutral-dark">{assignment.client}</h3>
@@ -291,6 +305,34 @@ export default function AssignmentsTable() {
 							))}
 						</div>
 					</>
+				)}
+
+				{filtered.length > 0 && (
+					<div className="mt-5 flex flex-col gap-3 border border-slate-200 bg-white p-4 shadow-lg shadow-slate-200/50 sm:flex-row sm:items-center sm:justify-between">
+						<p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-400">
+							Page {currentPage} of {totalPages}
+						</p>
+						<div className="flex items-center gap-2">
+							<button
+								type="button"
+								onClick={() => setPage((value) => Math.max(1, value - 1))}
+								disabled={currentPage === 1}
+								className="inline-flex items-center gap-2 border border-slate-200 px-4 py-2 text-xs font-bold uppercase tracking-wide text-slate-600 transition hover:border-brand-blue hover:text-brand-blue disabled:cursor-not-allowed disabled:opacity-40"
+							>
+								<ChevronLeft size={15} />
+								Previous
+							</button>
+							<button
+								type="button"
+								onClick={() => setPage((value) => Math.min(totalPages, value + 1))}
+								disabled={currentPage === totalPages}
+								className="inline-flex items-center gap-2 bg-brand-blue px-4 py-2 text-xs font-bold uppercase tracking-wide text-white transition hover:bg-brand-blue-dark disabled:cursor-not-allowed disabled:opacity-40"
+							>
+								Next
+								<ChevronRight size={15} />
+							</button>
+						</div>
+					</div>
 				)}
 			</div>
 		</section>

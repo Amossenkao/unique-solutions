@@ -10,6 +10,7 @@ import {
 	ChevronRight,
 	Code2,
 	GraduationCap,
+	PackageCheck,
 	Pause,
 	Play,
 	ServerCog,
@@ -42,50 +43,12 @@ interface Slide {
 
 const SLIDES: Slide[] = [
 	{
-		id: 'web',
-		image: '/images/stock5.jpg',
-		tint: 'from-[#06152d] via-[#083f7d]/90 to-[#07111f]',
-		badge: 'Web, API & Product Engineering',
-		headline: 'Modern web platforms for serious organizations',
-		accent: 'web platforms',
-		subtext:
-			'UTECHS designs fast, secure websites, portals, APIs, and internal systems that help Liberian institutions operate with confidence.',
-		ctaLabel: 'Plan a Web Project',
-		ctaHref: '#contact-form',
-		secondaryCtaLabel: 'View Capabilities',
-		secondaryCtaAction: 'scroll',
-		icon: Code2,
-		consoleTitle: 'Deployment pipeline',
-		consoleItems: ['Discovery & UX mapping', 'Next.js / API architecture', 'Security, hosting & support'],
-		metric: 'Full-stack',
-		metricLabel: 'Design, build, deploy',
-	},
-	{
-		id: 'enterprise',
-		image: '/images/hero/enterprise.jpg',
-		tint: 'from-[#061B3A] via-[#0A4B93]/90 to-[#07111f]',
-		badge: 'Enterprise ICT Solutions',
-		headline: 'Infrastructure that scales with your mission',
-		accent: 'Infrastructure',
-		subtext:
-			"From LAN/WAN networks to servers and support, we build the technology backbone behind Liberia's leading organizations.",
-		ctaLabel: 'Explore Enterprise Services',
-		ctaHref: '#services',
-		secondaryCtaLabel: 'Partner With Us',
-		secondaryCtaAction: 'modal',
-		icon: Building2,
-		consoleTitle: 'Infrastructure stack',
-		consoleItems: ['Structured cabling & switching', 'Servers, firewalls & licensing', 'Monitoring, maintenance & advisory'],
-		metric: '400+',
-		metricLabel: 'Network points delivered',
-	},
-	{
 		id: 'education',
 		image: '/images/hero/education.jpg',
 		tint: 'from-[#062416] via-[#4C8317]/90 to-[#07111f]',
 		badge: 'Computer Lab as a Service',
-		headline: 'Managed computer labs for every school',
-		accent: 'computer labs',
+		headline: 'Labs that power digital learning',
+		accent: 'Labs',
 		subtext:
 			'NComputing thin-client labs, trained instructors, curriculum, solar readiness, and support for one predictable student fee.',
 		ctaLabel: 'Learn About CaaS',
@@ -99,12 +62,69 @@ const SLIDES: Slide[] = [
 		metricLabel: 'Per student / semester',
 	},
 	{
+		id: 'equipment',
+		image: '/images/stock3.jpg',
+		tint: 'from-[#102036] via-[#0A4B93]/88 to-[#07111f]',
+		badge: 'ICT Equipment Sales',
+		headline: 'ICT gear, deployment-ready',
+		accent: 'ICT gear',
+		subtext:
+			'UTECHS supplies desktops, servers, routers, switches, firewalls, thin clients, licenses, accessories, and complete lab bundles with configuration and support.',
+		ctaLabel: 'Explore Equipment Sales',
+		ctaHref: '#ict-equipment',
+		secondaryCtaLabel: 'Request a Quote',
+		secondaryCtaAction: 'scroll',
+		icon: PackageCheck,
+		consoleTitle: 'Supply workflow',
+		consoleItems: ['Procure trusted hardware', 'Configure and test devices', 'Deliver, install and support'],
+		metric: 'Dell / HP / Cisco',
+		metricLabel: 'Procurement brands',
+	},
+	{
+		id: 'enterprise',
+		image: '/images/hero/enterprise.jpg',
+		tint: 'from-[#061B3A] via-[#0A4B93]/90 to-[#07111f]',
+		badge: 'Enterprise ICT Solutions',
+		headline: 'Infrastructure built to scale',
+		accent: 'Infrastructure',
+		subtext:
+			"From LAN/WAN networks to servers and support, we build the technology backbone behind Liberia's leading organizations.",
+		ctaLabel: 'Explore Enterprise Services',
+		ctaHref: '#enterprise-ict',
+		secondaryCtaLabel: 'Partner With Us',
+		secondaryCtaAction: 'modal',
+		icon: Building2,
+		consoleTitle: 'Infrastructure stack',
+		consoleItems: ['Structured cabling & switching', 'Servers, firewalls & licensing', 'Monitoring, maintenance & advisory'],
+		metric: '400+',
+		metricLabel: 'Network points delivered',
+	},
+	{
+		id: 'web',
+		image: '/images/stock5.jpg',
+		tint: 'from-[#06152d] via-[#083f7d]/90 to-[#07111f]',
+		badge: 'Web, API & Product Engineering',
+		headline: 'Web platforms that perform',
+		accent: 'Web platforms',
+		subtext:
+			'UTECHS designs fast, secure websites, portals, APIs, and internal systems that help Liberian institutions operate with confidence.',
+		ctaLabel: 'Plan a Web Project',
+		ctaHref: '#contact-form',
+		secondaryCtaLabel: 'View Capabilities',
+		secondaryCtaAction: 'scroll',
+		icon: Code2,
+		consoleTitle: 'Deployment pipeline',
+		consoleItems: ['Discovery & UX mapping', 'Next.js / API architecture', 'Security, hosting & support'],
+		metric: 'Full-stack',
+		metricLabel: 'Design, build, deploy',
+	},
+	{
 		id: 'security',
 		image: '/images/stock2.jpg',
 		tint: 'from-[#101827] via-[#0A4B93]/85 to-[#17370c]',
 		badge: 'Cybersecurity & Managed Support',
-		headline: 'Secure systems, monitored and maintained',
-		accent: 'Secure systems',
+		headline: 'Security you can count on',
+		accent: 'Security',
 		subtext:
 			'Endpoint protection, SOPHOS and ESET licensing, firewall deployments, backups, and advisory for institutions that cannot afford downtime.',
 		ctaLabel: 'Secure My Systems',
@@ -184,10 +204,8 @@ export default function Hero({ onOpenModal }: HeroProps) {
 	return (
 		<section
 			id="hero"
-			className="relative min-h-[760px] overflow-hidden pt-[72px] text-white"
+			className="relative mt-[72px] h-[calc(100svh-72px)] overflow-hidden text-white"
 			aria-label="UTECHS hero carousel"
-			onMouseEnter={() => setIsPaused(true)}
-			onMouseLeave={() => setIsPaused(false)}
 		>
 			{SLIDES.map((item, index) => (
 				<div
@@ -214,25 +232,25 @@ export default function Hero({ onOpenModal }: HeroProps) {
 			<div className="absolute inset-0 dark-tech-grid opacity-30" />
 			<div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-white to-transparent" />
 
-			<div className="relative z-10 section-container flex min-h-[688px] items-center py-12 lg:py-16">
-				<div className="grid w-full items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
+			<div className="relative z-10 section-container flex h-full items-center pb-24 pt-8 lg:pb-28 lg:pt-10">
+				<div className="grid w-full items-center gap-8 lg:grid-cols-[1.08fr_0.92fr]">
 					<div key={`copy-${slide.id}`} className="max-w-3xl reveal-up">
-						<div className="mb-6 inline-flex items-center gap-2 border border-white/15 bg-white/10 px-3 py-2 text-[11px] font-bold uppercase tracking-[0.16em] text-white/80 backdrop-blur-md">
+						<div className="mb-4 inline-flex items-center gap-2 border border-white/15 bg-white/10 px-3 py-2 text-[11px] font-bold uppercase tracking-[0.16em] text-white/80 backdrop-blur-md">
 							<Icon size={15} className="text-brand-green" />
 							{slide.badge}
 						</div>
 
-						<h1 className="font-display text-4xl font-extrabold leading-[1.04] tracking-tight text-white sm:text-5xl lg:text-6xl xl:text-[4.75rem]">
+						<h1 className="font-display text-4xl font-extrabold leading-[1.04] tracking-tight text-white sm:text-5xl lg:text-6xl xl:text-[4.25rem]">
 							{slide.headline.split(slide.accent)[0]}
 							<span className="text-brand-green">{slide.accent}</span>
 							{slide.headline.split(slide.accent)[1]}
 						</h1>
 
-						<p className="mt-6 max-w-2xl text-base leading-8 text-white/72 sm:text-lg">
+						<p className="mt-4 max-w-2xl text-base leading-7 text-white/72 sm:text-lg">
 							{slide.subtext}
 						</p>
 
-						<div className="mt-9 flex flex-col gap-3 sm:flex-row">
+						<div className="mt-7 flex flex-col gap-3 sm:flex-row">
 							<button
 								type="button"
 								onClick={() => scrollTo(slide.ctaHref)}
@@ -251,21 +269,21 @@ export default function Hero({ onOpenModal }: HeroProps) {
 							</button>
 						</div>
 
-						<div className="mt-10 grid max-w-2xl grid-cols-3 border border-white/12 bg-white/[0.07] backdrop-blur-md">
+						<div className="mt-7 grid max-w-2xl grid-cols-3 border border-white/12 bg-white/[0.07] backdrop-blur-md">
 							{[
 								['2014', 'Founded in Liberia'],
 								['12+', 'Institutional partners'],
 								['Web + ICT', 'Integrated delivery'],
 							].map(([value, label]) => (
 								<div key={label} className="border-r border-white/10 p-4 last:border-r-0">
-									<div className="font-display text-xl font-extrabold text-white">{value}</div>
+									<div className="font-display text-lg font-extrabold text-white">{value}</div>
 									<div className="mt-1 text-[11px] font-medium uppercase tracking-wide text-white/48">{label}</div>
 								</div>
 							))}
 						</div>
 					</div>
 
-					<div key={`panel-${slide.id}`} className="hidden lg:block reveal-up">
+					<div key={`panel-${slide.id}`} className="hidden xl:block reveal-up">
 						<div className="ml-auto max-w-[470px] border border-white/15 bg-slate-950/55 p-4 shadow-2xl shadow-black/30 backdrop-blur-xl">
 							<div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3">
 								<div className="flex items-center gap-2">
@@ -276,8 +294,8 @@ export default function Hero({ onOpenModal }: HeroProps) {
 								<span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/38">utechs.ops</span>
 							</div>
 
-							<div className="command-line bg-black/35 p-5 font-mono">
-								<div className="mb-5 flex items-center gap-3">
+							<div className="command-line bg-black/35 p-4 font-mono">
+								<div className="mb-4 flex items-center gap-3">
 									<div className="flex h-11 w-11 items-center justify-center bg-brand-green text-slate-950">
 										<ServerCog size={22} />
 									</div>
@@ -297,7 +315,7 @@ export default function Hero({ onOpenModal }: HeroProps) {
 									))}
 								</div>
 
-								<div className="mt-7 grid grid-cols-[0.9fr_1.1fr] gap-3">
+								<div className="mt-5 grid grid-cols-[0.9fr_1.1fr] gap-3">
 									<div className="border border-white/10 bg-white/[0.06] p-4">
 										<p className="font-display text-3xl font-extrabold text-brand-green">{slide.metric}</p>
 										<p className="mt-1 text-[11px] uppercase tracking-wide text-white/42">{slide.metricLabel}</p>
@@ -318,7 +336,7 @@ export default function Hero({ onOpenModal }: HeroProps) {
 				</div>
 			</div>
 
-			<div className="absolute bottom-7 left-1/2 z-20 flex w-[calc(100%-2rem)] max-w-[82rem] -translate-x-1/2 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+			<div className="absolute bottom-5 left-1/2 z-20 flex w-[calc(100%-2rem)] max-w-[82rem] -translate-x-1/2 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
 				<div className="flex items-center gap-2">
 					{SLIDES.map((item, index) => (
 						<button

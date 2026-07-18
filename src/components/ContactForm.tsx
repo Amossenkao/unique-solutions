@@ -225,8 +225,8 @@ export default function ContactForm() {
         </div>
 
         <div className="grid lg:grid-cols-5 gap-10 max-w-6xl mx-auto">
-          {/* Form — left column */}
-          <div className="lg:col-span-3 glass-panel p-5 sm:p-6">
+          {/* Form */}
+          <div className="lg:col-span-3 lg:order-2 glass-panel p-5 sm:p-6">
             <form onSubmit={handleSubmit} noValidate className="space-y-6">
               {/* Partner type selector */}
               <div>
@@ -670,8 +670,8 @@ export default function ContactForm() {
             </form>
           </div>
 
-          {/* Info sidebar — right column */}
-          <div className="lg:col-span-2 space-y-5">
+          {/* Info sidebar */}
+          <div className="lg:col-span-2 lg:order-1 space-y-5">
             {/* Contact cards */}
             <div className="bg-white rounded-lg border border-slate-100 shadow-sm p-6 space-y-6">
               <div>

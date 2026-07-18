@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, type ElementType } from 'react';
+import Image from 'next/image';
 import {
 	ArrowUpRight,
 	BookOpen,
@@ -13,13 +14,16 @@ import {
 	Layers3,
 	Monitor,
 	Network,
+	PackageCheck,
 	Server,
 	Shield,
+	ShoppingCart,
 	Sun,
+	Truck,
 	Workflow,
 } from 'lucide-react';
 
-type Studio = 'build' | 'operate' | 'learn';
+type Studio = 'build' | 'operate' | 'supply' | 'learn';
 
 interface Capability {
 	icon: ElementType;
@@ -111,6 +115,38 @@ const STUDIOS: Record<
 			},
 		],
 	},
+	supply: {
+		label: 'ICT Equipment Sales',
+		short: 'Supply',
+		icon: PackageCheck,
+		headline: 'Reliable ICT equipment, sourced, configured, and supported.',
+		copy:
+			'UTECHS supplies desktops, servers, routers, switches, thin clients, accessories, licenses, and complete lab bundles for organizations that need equipment they can actually maintain.',
+		accent: 'text-brand-blue bg-brand-blue-light border-blue-100',
+		capabilities: [
+			{
+				icon: ShoppingCart,
+				title: 'Hardware Procurement',
+				description:
+					'Desktops, laptops, servers, printers, monitors, UPS units, routers, switches, firewalls, and accessories selected for real operating conditions.',
+				tags: ['Dell', 'HP', 'Cisco'],
+			},
+			{
+				icon: PackageCheck,
+				title: 'Configuration & Readiness',
+				description:
+					'Equipment can be imaged, licensed, tested, inventoried, labeled, and prepared before deployment to reduce downtime at handoff.',
+				tags: ['Imaging', 'Licensing', 'Testing'],
+			},
+			{
+				icon: Truck,
+				title: 'Delivery, Install & Support',
+				description:
+					'UTECHS can deliver, install, commission, and maintain supplied equipment as part of broader support agreements.',
+				tags: ['Delivery', 'Install', 'Warranty'],
+			},
+		],
+	},
 	learn: {
 		label: 'Computer Lab as a Service',
 		short: 'Learn',
@@ -146,9 +182,11 @@ const STUDIOS: Record<
 };
 
 const STACK = ['Next.js', 'React', 'Node.js', '.NET', 'Python', 'SQL', 'Cisco', 'SOPHOS', 'ESET', 'VMware'];
+const EQUIPMENT_IMAGES = ['/images/stock2.jpg', '/images/stock3.jpg', '/images/stock4.jpg', '/images/stock6.jpg'];
+const STUDIO_ORDER: Studio[] = ['supply', 'learn', 'operate', 'build'];
 
 export default function ServicesTabs() {
-	const [activeTab, setActiveTab] = useState<Studio>('build');
+	const [activeTab, setActiveTab] = useState<Studio>('supply');
 	const active = STUDIOS[activeTab];
 	const ActiveIcon = active.icon;
 
@@ -164,12 +202,12 @@ export default function ServicesTabs() {
 						</h2>
 					</div>
 					<p className="max-w-2xl text-sm leading-7 text-slate-500 lg:ml-auto">
-						A true IT company is more than a vendor list. UTECHS can design the website, integrate the data, secure the endpoints, wire the network, power the facility, and train the people who use it.
+						A true IT company is more than a vendor list. UTECHS can supply the equipment, build the lab, secure the network, support the infrastructure, and design the web systems that make the operation work.
 					</p>
 				</div>
 
-				<div className="mb-8 grid gap-3 md:grid-cols-3" role="tablist" aria-label="Service studios">
-					{(Object.keys(STUDIOS) as Studio[]).map((key) => {
+				<div className="mb-8 grid gap-3 md:grid-cols-4" role="tablist" aria-label="Service studios">
+					{STUDIO_ORDER.map((key) => {
 						const item = STUDIOS[key];
 						const Icon = item.icon;
 						const activeState = activeTab === key;
@@ -209,6 +247,23 @@ export default function ServicesTabs() {
 							<h3 className="font-display text-2xl font-extrabold leading-tight">{active.headline}</h3>
 							<p className="mt-4 text-sm leading-7 text-white/62">{active.copy}</p>
 						</div>
+
+						{activeTab === 'supply' && (
+							<div className="mt-5 grid grid-cols-2 gap-2">
+								{EQUIPMENT_IMAGES.map((src, index) => (
+									<div key={src} className="relative aspect-[4/3] overflow-hidden border border-white/10 bg-white/[0.04]">
+										<Image
+											src={src}
+											alt={`UTECHS ICT equipment stock ${index + 1}`}
+											fill
+											className="object-cover"
+											sizes="(min-width: 1024px) 18vw, 45vw"
+										/>
+										<div className="absolute inset-0 bg-gradient-to-t from-slate-950/45 to-transparent" />
+									</div>
+								))}
+							</div>
+						)}
 
 						<div className="grid grid-cols-2 gap-3">
 							{[
