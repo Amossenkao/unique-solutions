@@ -66,7 +66,7 @@ export default function Footer() {
               </div>
               <div>
                 <div className="font-display font-bold text-white text-base leading-tight">
-                  UTECHS
+                  UNIQUE
                 </div>
                 <div className="text-[10px] text-slate-400 uppercase tracking-wide">
                   Technology Solutions
@@ -195,7 +195,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-slate-500 text-xs">
-            © {year} Unique Technology Solutions (UTECHS). All rights reserved. Monrovia, Liberia.
+            © {year} Unique Technology Solutions (UNIQUE). All rights reserved. Monrovia, Liberia.
           </p>
           <div className="flex items-center gap-4">
             <span className="text-slate-600 text-xs">Liberian-Owned Business</span>
