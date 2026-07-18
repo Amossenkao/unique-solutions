@@ -3,9 +3,12 @@
 import { useState } from "react";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import About from "@/components/About";
 import PartnerBanner from "@/components/PartnerBanner";
 import ServicesTabs from "@/components/ServicesTabs";
 import DigitalLiteracy from "@/components/DigitalLiteracy";
+import EquipmentSales from "@/components/EquipmentSales";
+import EnterpriseICT from "@/components/EnterpriseICT";
 import AssignmentsTable from "@/components/AssignmentsTable";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
@@ -20,9 +23,12 @@ export default function Home() {
 
       <main>
         <Hero onOpenModal={() => setModalOpen(true)} />
+        <About />
         <PartnerBanner />
         <ServicesTabs />
         <DigitalLiteracy />
+        <EquipmentSales />
+        <EnterpriseICT />
         <AssignmentsTable />
         <ContactForm />
       </main>

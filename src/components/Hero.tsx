@@ -45,7 +45,7 @@ const SLIDES: Slide[] = [
 	{
 		id: 'education',
 		image: '/images/hero/education.jpg',
-		tint: 'from-[#062416] via-[#4C8317]/90 to-[#07111f]',
+		tint: 'from-[#062416] via-[#4C8317]/60 to-[#07111f]',
 		badge: 'Computer Lab as a Service',
 		headline: 'Labs that power digital learning',
 		accent: 'Labs',
@@ -64,7 +64,7 @@ const SLIDES: Slide[] = [
 	{
 		id: 'equipment',
 		image: '/images/stock3.jpg',
-		tint: 'from-[#102036] via-[#0A4B93]/88 to-[#07111f]',
+		tint: 'from-[#102036] via-[#0A4B93]/55 to-[#07111f]',
 		badge: 'ICT Equipment Sales',
 		headline: 'ICT gear, deployment-ready',
 		accent: 'ICT gear',

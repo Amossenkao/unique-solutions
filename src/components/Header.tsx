@@ -4,11 +4,14 @@ import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import {
   BriefcaseBusiness,
+  Building2,
   ChevronRight,
   GraduationCap,
+  Info,
   Mail,
   Menu,
   Network,
+  PackageCheck,
   X,
 } from "lucide-react";
 
@@ -17,8 +20,11 @@ interface HeaderProps {
 }
 
 const NAV_LINKS = [
+  { label: "About Us", href: "#about", icon: Info },
   { label: "Services", href: "#services", icon: Network },
   { label: "Digital Literacy", href: "#digital-literacy", icon: GraduationCap },
+  // { label: "ICT Equipment", href: "#ict-equipment", icon: PackageCheck },
+  // { label: "Enterprise ICT", href: "#enterprise-ict", icon: Building2 },
   { label: "Track Record", href: "#track-record", icon: BriefcaseBusiness },
   { label: "Contact Us", href: "#contact", icon: Mail },
 ];
@@ -90,7 +96,7 @@ export default function Header({ onOpenModal }: HeaderProps) {
                 <span className={`font-display text-lg font-bold tracking-tight ${
                   isScrolled ? "text-brand-blue-dark" : "text-white"
                 }`}>
-                  UTECHS
+                  UNIQUE
                 </span>
                 <span className={`text-[10px] font-medium tracking-wide uppercase ${
                   isScrolled ? "text-slate-500" : "text-white/58"
@@ -190,7 +196,7 @@ export default function Header({ onOpenModal }: HeaderProps) {
               </div>
               <div>
                 <p className="font-display text-base font-bold text-brand-blue-dark">
-                  UTECHS
+                  UNIQUE
                 </p>
                 <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">
                   Technology Solutions
