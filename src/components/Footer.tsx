@@ -6,15 +6,18 @@ import {
   Monitor,
   Shield,
   ExternalLink,
+  Code2,
+  Boxes,
+  Info,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
     <footer
-      id="contact"
       className="relative overflow-hidden bg-slate-950 text-white"
       aria-label="Footer"
     >
@@ -30,13 +33,13 @@ export default function Footer() {
               </h2>
             </div>
             <div className="flex gap-3 flex-shrink-0">
-              <a
-                href="mailto:uniquetechsolutions2022@gmail.com"
+              <Link
+                href="/contact"
                 className="inline-flex items-center gap-2 bg-white text-brand-blue font-semibold px-5 py-2.5 rounded-lg text-sm hover:bg-brand-blue-light transition-colors"
               >
                 <Mail size={15} />
-                Email Us
-              </a>
+                Get in Touch
+              </Link>
               <a
                 href="tel:0555532355"
                 className="btn-outline-white text-sm"
@@ -51,9 +54,9 @@ export default function Footer() {
 
       {/* Main footer content */}
       <div className="relative section-container py-14">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-10">
           {/* Brand column */}
-          <div className="md:col-span-1">
+          <div className="md:col-span-2">
             <div className="flex items-center gap-3 mb-4">
               <div className="bg-white p-1 rounded-lg shadow-sm flex-shrink-0">
                 <Image
@@ -88,6 +91,28 @@ export default function Footer() {
             </div>
           </div>
 
+          {/* Pages column */}
+          <div>
+            <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-widest mb-4">
+              Pages
+            </h3>
+            <ul className="flex flex-col gap-2.5">
+              {[
+                { icon: Info, label: "About Us", href: "/about" },
+                { icon: Network, label: "Services", href: "/services" },
+                { icon: Boxes, label: "Technology Solutions", href: "/solutions" },
+                { icon: Mail, label: "Contact Us", href: "/contact" },
+              ].map(({ icon: Icon, label, href }) => (
+                <li key={href}>
+                  <Link href={href} className="flex items-center gap-2 text-slate-400 text-xs hover:text-slate-200 transition-colors">
+                    <Icon size={12} className="text-slate-500 flex-shrink-0" />
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {/* Services column */}
           <div>
             <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-widest mb-4">
@@ -95,12 +120,12 @@ export default function Footer() {
             </h3>
             <ul className="flex flex-col gap-2.5">
               {[
-                { icon: Network, label: "LAN/WAN Infrastructure" },
-                { icon: Shield, label: "Cybersecurity (ESET, SOPHOS)" },
-                { icon: Monitor, label: "NComputing Computer Labs" },
-                { icon: Network, label: "Solar & Power Systems" },
-                { icon: Monitor, label: "Web & Software Development" },
-                { icon: Shield, label: "Managed IT Services" },
+                { icon: Code2, label: "Software Development" },
+                { icon: Monitor, label: "Computer Lab as a Service" },
+                { icon: Network, label: "ICT Equipment Supply" },
+                { icon: Shield, label: "Network Infrastructure" },
+                { icon: Shield, label: "Cybersecurity & Cloud" },
+                { icon: Boxes, label: "Policy & Strategy" },
               ].map(({ icon: Icon, label }) => (
                 <li key={label} className="flex items-center gap-2">
                   <Icon size={12} className="text-slate-500 flex-shrink-0" />
@@ -141,61 +166,12 @@ export default function Footer() {
               <ExternalLink size={11} />
             </a>
           </div>
-
-          {/* Contact column */}
-          <div>
-            <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-widest mb-4">
-              Contact
-            </h3>
-            <div className="flex flex-col gap-4">
-              <div>
-                <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-2 font-medium">
-                  Phone
-                </p>
-                <div className="flex flex-col gap-2">
-                  <a
-                    href="tel:0555532355"
-                    className="flex items-center gap-2 text-slate-200 text-sm hover:text-brand-green transition-colors group"
-                  >
-                    <div className="w-7 h-7 rounded-lg bg-slate-800 group-hover:bg-brand-green/20 flex items-center justify-center transition-colors">
-                      <Phone size={12} className="text-slate-400 group-hover:text-brand-green" />
-                    </div>
-                    0555532355
-                  </a>
-                  <a
-                    href="tel:0779373928"
-                    className="flex items-center gap-2 text-slate-200 text-sm hover:text-brand-green transition-colors group"
-                  >
-                    <div className="w-7 h-7 rounded-lg bg-slate-800 group-hover:bg-brand-green/20 flex items-center justify-center transition-colors">
-                      <Phone size={12} className="text-slate-400 group-hover:text-brand-green" />
-                    </div>
-                    0779373928
-                  </a>
-                </div>
-              </div>
-
-              <div>
-                <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-2 font-medium">
-                  Email
-                </p>
-                <a
-                  href="mailto:uniquetechsolutions2022@gmail.com"
-                  className="flex items-start gap-2 text-brand-blue hover:text-white transition-colors group text-xs break-all"
-                >
-                  <div className="w-7 h-7 rounded-lg bg-slate-800 group-hover:bg-brand-blue/20 flex items-center justify-center flex-shrink-0 transition-colors mt-0.5">
-                    <Mail size={12} className="text-slate-400 group-hover:text-brand-blue" />
-                  </div>
-                  uniquetechsolutions2022@gmail.com
-                </a>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-slate-500 text-xs">
-            © {year} Unique Technology Solutions (UNIQUE). All rights reserved. Monrovia, Liberia.
+            &copy; {year} Unique Technology Solutions (UNIQUE). All rights reserved. Monrovia, Liberia.
           </p>
           <div className="flex items-center gap-4">
             <span className="text-slate-600 text-xs">Liberian-Owned Business</span>

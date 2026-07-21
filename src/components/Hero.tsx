@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState, type ElementType } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import {
 	ArrowRight,
 	ArrowUpRight,
@@ -33,7 +34,8 @@ interface Slide {
 	ctaLabel: string;
 	ctaHref: string;
 	secondaryCtaLabel: string;
-	secondaryCtaAction: 'modal' | 'scroll';
+	secondaryCtaHref: string;
+	secondaryCtaOpensModal?: boolean;
 	icon: ElementType;
 	consoleTitle: string;
 	consoleItems: string[];
@@ -52,9 +54,10 @@ const SLIDES: Slide[] = [
 		subtext:
 			'NComputing thin-client labs, trained instructors, curriculum, solar readiness, and support for one predictable student fee.',
 		ctaLabel: 'Learn About CaaS',
-		ctaHref: '#digital-literacy',
+		ctaHref: '/services#computer-lab',
 		secondaryCtaLabel: 'Request a Lab',
-		secondaryCtaAction: 'scroll',
+		secondaryCtaHref: '/contact',
+		secondaryCtaOpensModal: true,
 		icon: GraduationCap,
 		consoleTitle: 'Lab operating model',
 		consoleItems: ['Site assessment & hardware sizing', 'Instructor-led digital literacy', 'Maintenance and replacement plan'],
@@ -69,11 +72,12 @@ const SLIDES: Slide[] = [
 		headline: 'ICT gear, deployment-ready',
 		accent: 'ICT gear',
 		subtext:
-			'UTECHS supplies desktops, servers, routers, switches, firewalls, thin clients, licenses, accessories, and complete lab bundles with configuration and support.',
+			'UNIQUE supplies desktops, servers, routers, switches, firewalls, thin clients, licenses, accessories, and complete lab bundles with configuration and support.',
 		ctaLabel: 'Explore Equipment Sales',
-		ctaHref: '#ict-equipment',
+		ctaHref: '/services#ict-equipment',
 		secondaryCtaLabel: 'Request a Quote',
-		secondaryCtaAction: 'scroll',
+		secondaryCtaHref: '/contact',
+		secondaryCtaOpensModal: true,
 		icon: PackageCheck,
 		consoleTitle: 'Supply workflow',
 		consoleItems: ['Procure trusted hardware', 'Configure and test devices', 'Deliver, install and support'],
@@ -90,9 +94,10 @@ const SLIDES: Slide[] = [
 		subtext:
 			"From LAN/WAN networks to servers and support, we build the technology backbone behind Liberia's leading organizations.",
 		ctaLabel: 'Explore Enterprise Services',
-		ctaHref: '#enterprise-ict',
+		ctaHref: '/services#network-infrastructure',
 		secondaryCtaLabel: 'Partner With Us',
-		secondaryCtaAction: 'modal',
+		secondaryCtaHref: '/contact',
+		secondaryCtaOpensModal: true,
 		icon: Building2,
 		consoleTitle: 'Infrastructure stack',
 		consoleItems: ['Structured cabling & switching', 'Servers, firewalls & licensing', 'Monitoring, maintenance & advisory'],
@@ -107,11 +112,11 @@ const SLIDES: Slide[] = [
 		headline: 'Web platforms that perform',
 		accent: 'Web platforms',
 		subtext:
-			'UTECHS designs fast, secure websites, portals, APIs, and internal systems that help Liberian institutions operate with confidence.',
+			'UNIQUE designs fast, secure websites, portals, APIs, and internal systems that help Liberian institutions operate with confidence.',
 		ctaLabel: 'Plan a Web Project',
-		ctaHref: '#contact-form',
+		ctaHref: '/services#software-development',
 		secondaryCtaLabel: 'View Capabilities',
-		secondaryCtaAction: 'scroll',
+		secondaryCtaHref: '/services',
 		icon: Code2,
 		consoleTitle: 'Deployment pipeline',
 		consoleItems: ['Discovery & UX mapping', 'Next.js / API architecture', 'Security, hosting & support'],
@@ -128,9 +133,10 @@ const SLIDES: Slide[] = [
 		subtext:
 			'Endpoint protection, SOPHOS and ESET licensing, firewall deployments, backups, and advisory for institutions that cannot afford downtime.',
 		ctaLabel: 'Secure My Systems',
-		ctaHref: '#services',
+		ctaHref: '/services#cybersecurity',
 		secondaryCtaLabel: 'Talk to an Expert',
-		secondaryCtaAction: 'scroll',
+		secondaryCtaHref: '/contact',
+		secondaryCtaOpensModal: true,
 		icon: Shield,
 		consoleTitle: 'Protection loop',
 		consoleItems: ['Assess exposure', 'Deploy controls', 'Monitor, patch, improve'],
@@ -183,29 +189,13 @@ export default function Hero({ onOpenModal }: HeroProps) {
 		[isPaused],
 	);
 
-	const scrollTo = (href: string) => {
-		const el = document.querySelector(href);
-		if (!el) return;
-		const top = el.getBoundingClientRect().top + window.pageYOffset - 88;
-		window.scrollTo({ top, behavior: 'smooth' });
-	};
-
-	const handleSecondaryClick = (targetSlide: Slide) => {
-		if (targetSlide.secondaryCtaAction === 'modal') {
-			onOpenModal();
-			return;
-		}
-
-		scrollTo(targetSlide.ctaHref);
-	};
-
 	const Icon = slide.icon;
 
 	return (
 		<section
 			id="hero"
 			className="relative mt-[72px] h-[calc(100svh-72px)] overflow-hidden text-white"
-			aria-label="UTECHS hero carousel"
+			aria-label="UNIQUE hero carousel"
 		>
 			{SLIDES.map((item, index) => (
 				<div
@@ -251,22 +241,30 @@ export default function Hero({ onOpenModal }: HeroProps) {
 						</p>
 
 						<div className="mt-7 flex flex-col gap-3 sm:flex-row">
-							<button
-								type="button"
-								onClick={() => scrollTo(slide.ctaHref)}
+							<Link
+								href={slide.ctaHref}
 								className="group inline-flex min-h-12 items-center justify-center gap-2 bg-white px-6 py-3 text-sm font-bold text-brand-blue-dark shadow-2xl shadow-black/25 transition duration-200 hover:-translate-y-0.5 hover:bg-brand-green hover:text-white"
 							>
 								{slide.ctaLabel}
 								<ArrowRight size={17} className="transition-transform group-hover:translate-x-1" />
-							</button>
-							<button
-								type="button"
-								onClick={() => handleSecondaryClick(slide)}
-								className="group inline-flex min-h-12 items-center justify-center gap-2 border border-white/25 bg-white/[0.08] px-6 py-3 text-sm font-bold text-white backdrop-blur-md transition duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:bg-white/[0.16]"
-							>
-								{slide.secondaryCtaLabel}
-								<ArrowUpRight size={17} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-							</button>
+							</Link>
+							{slide.secondaryCtaOpensModal ? (
+								<button
+									onClick={onOpenModal}
+									className="group inline-flex min-h-12 items-center justify-center gap-2 border border-white/25 bg-white/[0.08] px-6 py-3 text-sm font-bold text-white backdrop-blur-md transition duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:bg-white/[0.16] cursor-pointer"
+								>
+									{slide.secondaryCtaLabel}
+									<ArrowUpRight size={17} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+								</button>
+							) : (
+								<Link
+									href={slide.secondaryCtaHref}
+									className="group inline-flex min-h-12 items-center justify-center gap-2 border border-white/25 bg-white/[0.08] px-6 py-3 text-sm font-bold text-white backdrop-blur-md transition duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:bg-white/[0.16]"
+								>
+									{slide.secondaryCtaLabel}
+									<ArrowUpRight size={17} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+								</Link>
+							)}
 						</div>
 
 						<div className="mt-7 grid max-w-2xl grid-cols-3 border border-white/12 bg-white/[0.07] backdrop-blur-md">
