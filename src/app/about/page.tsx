@@ -320,64 +320,75 @@ export default function AboutPage() {
 								</div>
 
 								<div className="relative">
-									{/* Centre spine */}
-									<div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-brand-blue/30 via-brand-blue/20 to-transparent" />
+									{/* Vertical rail */}
+									<div className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-brand-blue/25 to-transparent" />
 
-									<ol className="space-y-0">
+									<ol className="flex flex-col">
 										{MILESTONES.map(({ year, title, detail, side }) => {
 											const isLeft = side === 'left';
 											return (
-												<li key={year} className="relative flex items-center">
-													{/* Left slot */}
-													<div
-														className={`flex w-[calc(50%-20px)] ${isLeft ? 'pr-4' : ''}`}
-													>
-														{isLeft && (
-															<div className="w-full border border-slate-200 bg-white p-4 shadow-sm transition hover:border-brand-blue/30 hover:shadow-md">
-																<span className="font-display text-xs font-extrabold text-brand-blue">
-																	{year}
-																</span>
-																<h4 className="mt-0.5 font-display text-sm font-bold text-brand-neutral-dark">
-																	{title}
-																</h4>
-																<p className="mt-1 text-[11px] leading-4 text-slate-400">
-																	{detail}
-																</p>
-															</div>
-														)}
-													</div>
+												<li
+													key={year}
+													className="relative flex min-h-[110px] items-start pb-2 last:pb-0 max-sm:min-h-[90px]"
+												>
 													{/* Node */}
-													<div className="relative z-10 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border-2 border-brand-blue bg-white shadow-sm shadow-brand-blue/20">
-														<div className="h-2.5 w-2.5 rounded-full bg-brand-blue" />
+													<div className="absolute left-1/2 top-7 z-10 -translate-x-1/2 max-sm:left-5 max-sm:top-[18px]">
+														<div className="relative flex h-7 w-7 items-center justify-center rounded-full border border-brand-blue/40 bg-white ring-1 ring-brand-blue/10 ring-offset-2">
+															<div className="h-2 w-2 rounded-full bg-brand-blue" />
+														</div>
 													</div>
-													{/* Right slot */}
+
+													{/* Connector arm */}
 													<div
-														className={`flex w-[calc(50%-20px)] ${!isLeft ? 'pl-4' : ''}`}
+														className={`absolute top-[41px] h-px bg-slate-200 max-sm:hidden ${
+															isLeft
+																? 'right-1/2 mr-[14px] w-[calc(50%-34px)]'
+																: 'left-1/2 ml-[14px] w-[calc(50%-34px)]'
+														}`}
+													/>
+
+													{/* Card */}
+													<div
+														className={`group relative overflow-hidden rounded-[12px] border border-slate-200 bg-white p-4 transition hover:border-brand-blue/40 hover:shadow-lg hover:shadow-brand-blue/5 ${
+															isLeft
+																? 'mr-auto w-[calc(50%-48px)]'
+																: 'ml-auto w-[calc(50%-48px)]'
+														} max-sm:ml-[52px] max-sm:mr-0 max-sm:w-[calc(100%-52px)]`}
 													>
-														{!isLeft && (
-															<div className="w-full border border-slate-200 bg-white p-4 shadow-sm transition hover:border-brand-blue/30 hover:shadow-md">
-																<span className="font-display text-xs font-extrabold text-brand-blue">
-																	{year}
-																</span>
-																<h4 className="mt-0.5 font-display text-sm font-bold text-brand-neutral-dark">
-																	{title}
-																</h4>
-																<p className="mt-1 text-[11px] leading-4 text-slate-400">
-																	{detail}
-																</p>
-															</div>
-														)}
+														{/* Giant year watermark */}
+														<span
+															className={`pointer-events-none absolute bottom-[-12px] select-none font-display text-[64px] font-extrabold leading-none tracking-[-2px] text-slate-100 max-sm:right-[-2px] ${
+																isLeft ? 'right-[-4px]' : 'left-[-4px]'
+															}`}
+														>
+															{year}
+														</span>
+
+														<p className="relative text-[11px] font-bold uppercase tracking-[0.12em] text-brand-blue">
+															{year}
+														</p>
+														<h4 className="relative mt-1 font-display text-sm font-bold text-brand-neutral-dark">
+															{title}
+														</h4>
+														<p className="relative mt-1.5 text-[11px] leading-[1.6] text-slate-400">
+															{detail}
+														</p>
 													</div>
 												</li>
 											);
 										})}
 									</ol>
 
-									<div className="relative z-10 mx-auto mt-4 flex w-fit items-center gap-2 border border-brand-green/30 bg-brand-green/10 px-4 py-2">
-										<MapPin size={12} className="text-brand-green" />
-										<span className="text-[11px] font-bold text-brand-green">
-											Growing — Monrovia, Liberia
-										</span>
+									{/* Terminus badge */}
+									<div className="mt-4 flex items-center justify-center gap-3">
+										<div className="h-px flex-1 max-w-[80px] bg-slate-200" />
+										<div className="inline-flex items-center gap-2 rounded-[var(--radius)] border border-brand-green/30 bg-brand-green/10 px-3 py-1.5">
+											<MapPin size={12} className="text-brand-green" />
+											<span className="text-[11px] font-bold text-brand-green">
+												Growing — Monrovia, Liberia
+											</span>
+										</div>
+										<div className="h-px flex-1 max-w-[80px] bg-slate-200" />
 									</div>
 								</div>
 							</div>
