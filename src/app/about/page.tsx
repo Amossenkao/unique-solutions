@@ -553,7 +553,6 @@ export default function AboutPage() {
 											<img
 												src={member.image}
 												alt={member.name}
-												fill
 												className="object-cover object-top transition-all duration-500 group-hover:scale-105"
 											/>
 										) : (
